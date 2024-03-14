@@ -181,7 +181,7 @@ HEADER STYLING
 
 .header {
 	background-color: $background-color;
-	background-image: url("../img/touring.jpg");
+	background-image: url("../img/header.png");
 	background-size: cover;
 	background-position: center center;
 	color: white;
@@ -208,6 +208,20 @@ HEADER STYLING
 			text-decoration: none;
 		}
 	}
+}
+
+.header::before {
+	content: "";
+	/* Required for pseudo-elements */
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(0, 0, 0, 0.7);
+	/* Semi-transparent black overlay */
+	pointer-events: none;
+	/* Allows clicks to pass through */
 }
 
 /***************
@@ -387,12 +401,21 @@ FOOTER STYLING
 	}
 
 	.copy,
+	.footer-pages-links,
 	.footer-links {
 		font-size: 0.8em;
 	}
 
 	.copy {
 		margin-bottom: 1rem;
+	}
+
+	.footer-pages-links {
+		text-align: right;
+		li {
+			display: inline-block;
+			margin-right: 8px;
+		}
 	}
 
 	&-links {
@@ -440,6 +463,8 @@ FOOTER STYLING
 			}
 		}
 	}
+
+	
 }
 
 /***************

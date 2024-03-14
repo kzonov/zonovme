@@ -1,33 +1,30 @@
 <div class="footer">
+	<div class="">
+		
+	</div>
 	<div class="container">
+		<div class="footer-pages-links">
+			<ul class="noList">
+				{%- for link in site.extended_navigation -%}{%- assign current = nil -%}{%- if page.url contains link.url or forloop.first and
+				page.url == '/' or page.url == 'index.html' -%}{%- assign current = 'current' -%}{%- endif -%}
+				<li class="element {%- if forloop.first -%}first{%- endif -%} {{ current }} {%- if forloop.last -%}last{%- endif -%}">
+					<a href="{{ link.url | relative_url }}">{{ link.title }}</a>
+				</li>
+				{%- endfor -%}
+			</ul>
+		</div>
 		<p class="copy">
-			&copy; {{ site.time | date: '%Y' }}
-			<a href="http://brianmaierjr.com">Brian Maier Jr.</a> Powered by
-			<a href="http://jekyllrb.com">Jekyll</a>
+			&copy; {{ site.time | date: '%Y' }} &nbsp;
+			<a href="https://zonov.me">Kirill Zonov</a>
 		</p>
 
 		<div class="footer-links">
 			<ul class="noList">
-				{%- if site.social.facebook -%}
-					{%- include footer_links/facebook_icon.html -%}
-				{%- endif -%}
-				{%- if site.social.twitter -%}
-					{%- include footer_links/twitter_icon.html -%}
-				{%- endif -%}
 				{%- if site.social.linkedin -%}
 					{%- include footer_links/linkedin_icon.html -%}
 				{%- endif -%}
 				{%- if site.social.github -%}
 					{%- include footer_links/github_icon.html -%}
-				{%- endif -%}
-				{%- if site.social.tumblr -%}
-					{%- include footer_links/tumblr_icon.html -%}
-				{%- endif -%}
-				{%- if site.social.youtube -%}
-					{%- include footer_links/youtube_icon.html -%}
-				{%- endif -%}
-				{%- if site.social.email -%}
-					{%- include footer_links/email_icon.html -%}
 				{%- endif -%}
 			</ul>
 		</div>

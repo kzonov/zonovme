@@ -22,7 +22,13 @@ navigation:
     - title: Home
       url: /index.html
     - title: About
-      url: /_pages/about.html
+      url: /about/
+
+extended_navigation:
+    - title: Home
+      url: /index.html
+    - title: About
+      url: /about/
     - title: Mentoring
       url: /_pages/engineering-mentoring.html
     - title: Speaking engagements
