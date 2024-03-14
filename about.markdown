@@ -10,4 +10,4 @@ In addition to my technical pursuits, I am passionate about entrepreneurship. Yo
 
 Family is central to my life, and in my spare time, I cherish cycling and creating music. If you're interested in exploring my musical creations, please visit this link to listen to some of my tracks: [Locked in a box](https://distrokid.com/hyperfollow/iliili/locked-in-a-box)
 
-I'm open for consulting and freelance projects or artistic and business collaborations, feel free to drop me a line in the Contact page: [Contact](/contact/)
+I am available for consulting and freelance projects, as well as artistic and business collaborations. Please feel free to reach out to me using the contact page: [Contact](/contact/)

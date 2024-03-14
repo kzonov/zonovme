@@ -23,6 +23,8 @@ navigation:
       url: /index.html
     - title: About
       url: /about/
+    - title: Contact
+      url: /contact/
 
 extended_navigation:
     - title: Home
@@ -33,6 +35,8 @@ extended_navigation:
       url: /_pages/engineering-mentoring.html
     - title: Speaking engagements
       url: /_pages/speaking-engagements.html
+    - title: Contact
+      url: /contact/
 
 social:
     github: graffzon
