@@ -1,0 +1,17 @@
+current directory: /Users/kirillzonov/projects/blog/long-haul-1/_vendor/ruby/2.6.0/gems/eventmachine-1.2.7/ext/fastfilereader
+/Users/kirillzonov/.asdf/installs/ruby/2.6.3/bin/ruby -I /Users/kirillzonov/.asdf/installs/ruby/2.6.3/lib/ruby/2.6.0 -r ./siteconf20240314-28212-10g8rdc.rb extconf.rb
+creating Makefile
+
+current directory: /Users/kirillzonov/projects/blog/long-haul-1/_vendor/ruby/2.6.0/gems/eventmachine-1.2.7/ext/fastfilereader
+make "DESTDIR=" clean
+
+current directory: /Users/kirillzonov/projects/blog/long-haul-1/_vendor/ruby/2.6.0/gems/eventmachine-1.2.7/ext/fastfilereader
+make "DESTDIR="
+compiling mapper.cpp
+compiling rubymain.cpp
+linking shared-object fastfilereaderext.bundle
+ld: warning: -multiply_defined is obsolete
+
+current directory: /Users/kirillzonov/projects/blog/long-haul-1/_vendor/ruby/2.6.0/gems/eventmachine-1.2.7/ext/fastfilereader
+make "DESTDIR=" install
+/usr/local/bin/ginstall -c -m 0755 fastfilereaderext.bundle ./.gem.20240314-28212-1b8qdo7

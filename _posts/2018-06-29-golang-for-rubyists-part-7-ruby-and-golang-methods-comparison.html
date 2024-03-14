@@ -1,0 +1,248 @@
+---
+layout: post
+title: Golang for Rubyists. Part 7. Ruby and Golang, methods comparison
+date: 2018-06-29 21:23:56.000000000 +02:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Development
+tags:
+- development
+- golang
+- golang arrays
+- golang maps
+- golang strings
+- ruby
+meta:
+  _edit_last: '1'
+  _adinserter_block_exceptions: ''
+  hefo_before: '0'
+  hefo_after: '0'
+  _syntaxhighlighter_encoded: '1'
+  _aioseop_description: Comparison of useful methods for Arrays, Maps/Hashes and Strings
+    for Ruby and Golang.
+  _aioseop_title: Golang for Rubyists. Part 7. Methods comparison of Golang and Ruby
+author:
+  login: graffzon
+  email: graffzon@gmail.com
+  display_name: graffzon
+  first_name: ''
+  last_name: ''
+permalink: "/golang-for-rubyists-part-7-ruby-and-golang-methods-comparison/"
+excerpt: "\n\t\t\t\t\t\t"
+---
+<p>
+				Hello, my dear friends. We all love Ruby (you too, right?) for its expressiveness and a set of useful methods out of the box. It would be a pleasure if when start using a new language, you had the similar methods or at least familiar ways to achieve same goals. Let's try to pick a few useful methods from Ruby and find out, are there any equivalents in Golang for them.</p>
+<p><!--more--><br />
+[caption id="attachment_654" align="aligncenter" width="640"]<img src="{{ site.baseurl }}/assets/2018/06/pablo-hermoso-422530-unsplash-1024x590.jpg" alt="pablo-hermoso-422530-unsplash" width="640" height="369" class="size-large wp-image-654" /> Photo by Pablo Hermoso on Unsplash[/caption]</p>
+<h2>Array</h2>
+<p>Let's start with something simple:<br />
+[ruby]<br />
+2.2.1 :001 &gt; array = [1,3,5,7]<br />
+ =&gt; [1, 3, 5, 7]<br />
+2.2.1 :002 &gt; array.shift<br />
+ =&gt; 1<br />
+2.2.1 :003 &gt; array<br />
+ =&gt; [3, 5, 7]<br />
+2.2.1 :004 &gt; array.push(1)<br />
+ =&gt; [3, 5, 7, 1]<br />
+2.2.1 :005 &gt; array.unshift(array.pop)<br />
+ =&gt; [1, 3, 5, 7]<br />
+[/ruby]<br />
+So, we used four methods here: <code>shift, unshift, push, pop</code>. Now let me try to do something similar in Golang:<br />
+[cpp]<br />
+package main</p>
+<p>import (&quot;fmt&quot;)</p>
+<p>func main() {<br />
+	// Initialize the slice<br />
+	array := []int{1, 3, 5, 7}<br />
+	fmt.Println(array)</p>
+<p>	// Shift<br />
+	x := array[0]<br />
+	fmt.Println(x)<br />
+	array = array[1:]<br />
+	fmt.Println(array)</p>
+<p>	// Push<br />
+	array = append(array, x)<br />
+	fmt.Println(array)</p>
+<p>	// Pop and Unshift<br />
+	x, array = array[len(array)-1], array[:len(array)-1]<br />
+	array = append([]int{x}, array...)<br />
+	fmt.Println(array)<br />
+}<br />
+[/cpp]<br />
+(<a href="https://play.golang.org/p/wNgO9LeX514" rel="noopener" target="_blank">https://play.golang.org/p/wNgO9LeX514</a>)</p>
+<p>Not so short and expressive, huh? But still pretty straightforward. The only confusion I can anticipate is the last example, with pop and unshift. Just to explain, at first we assign to <code>x</code> the last element of an <code>array</code> and we modify the <code>array</code> variable to be everything starting from the element at index 0 to the pre-last one. And at the next line we create a new slice with just <code>x</code> and append an <code>array</code> to it.<br />
+Also, you could notice here, that usage of <code>[]</code> to access an array/slice element is exactly the same as in Ruby (or most of the languages).</p>
+<p>Let's move on to the more solid examples:<br />
+[ruby]<br />
+2.2.1 :001 &gt; array = [1, 3, 5, 7]<br />
+ =&gt; [1, 3, 5, 7]<br />
+2.2.1 :002 &gt; array.map { |a| a + 1 }<br />
+ =&gt; [2, 4, 6, 8]<br />
+2.2.1 :003 &gt; array<br />
+ =&gt; [1, 3, 5, 7]<br />
+2.2.1 :005 &gt; array.reject { |a| a % 3 == 0}<br />
+ =&gt; [1, 5, 7]<br />
+2.2.1 :006 &gt; array<br />
+ =&gt; [1, 3, 5, 7]<br />
+2.2.1 :007 &gt; array.sample<br />
+ =&gt; 7<br />
+2.2.1 :008 &gt; array<br />
+ =&gt; [1, 3, 5, 7]<br />
+2.2.1 :009 &gt;<br />
+2.2.1 :010 &gt; array.min<br />
+ =&gt; 1<br />
+2.2.1 :011 &gt;<br />
+2.2.1 :012 &gt; array.max<br />
+ =&gt; 7<br />
+2.2.1 :014 &gt; array.shuffle<br />
+ =&gt; [5, 7, 3, 1]<br />
+[/ruby]</p>
+<p>Here we iterate through a collection, without original collection modification, then we <code>reject</code> some value also without a modification, then we get a random element from it, then we have a basic min/max methods and a <code>shuffle</code> method, which shuffles an array elements. Are you optimistic about Golang abilities here? Let it a try! Nope, let me just tell you, that Go is not a functional language. Not at all. Not for an iota. The only way you can achieve map/reduce/filter functionality is by writing <code>for</code> loops. Also, there are no built-in min/max functions, unfortunately. Surprisingly I was able to find a <code>shuffle</code> implementation:<br />
+[cpp]<br />
+package main</p>
+<p>import (<br />
+	&quot;fmt&quot;<br />
+	&quot;math/rand&quot;<br />
+)</p>
+<p>func main() {<br />
+	// Initialize the slice<br />
+	array := []int{1, 3, 5, 7}<br />
+	fmt.Println(array)<br />
+	rand.Shuffle(len(array), func(i, j int) {<br />
+		array[i], array[j] = array[j], array[i]<br />
+	})<br />
+	fmt.Println(array)<br />
+}<br />
+[/cpp]</p>
+<p>Btw it still uses two <code>for</code> loops under the hood: <a href="https://golang.org/src/math/rand/rand.go#L232" rel="noopener" target="_blank">https://golang.org/src/math/rand/rand.go#L232</a>. Interesting to notice here is that it's possible to pass a function to a method in Golang.</p>
+<p>Just to give an impression, here is the possible implementation of our own <code>Filter</code> function in Golang:<br />
+[cpp]<br />
+package main</p>
+<p>import (&quot;fmt&quot;)</p>
+<p>func main() {<br />
+	array := []int{1, 3, 5, 7}<br />
+	filteredArray := Filter(array, func(i int) bool {<br />
+		return i%3 != 0<br />
+	})<br />
+	fmt.Println(filteredArray)<br />
+}</p>
+<p>func Filter(in []int, fn func(int) bool) []int {<br />
+	out := make([]int, 0, len(in))</p>
+<p>	for i := 0; i &lt; len(in); i++ {<br />
+		current := in[i]</p>
+<p>		if fn(current) {<br />
+			out = append(out, current)<br />
+		}<br />
+	}</p>
+<p>	return out<br />
+}<br />
+[/cpp]<br />
+(<a href="https://play.golang.org/p/LFvueXzO-BU" rel="noopener" target="_blank">https://play.golang.org/p/LFvueXzO-BU</a>. Here is a version, using interfaces, more generic, but still far from ideal <a href="https://play.golang.org/p/N9JvUXo7ugq" rel="noopener" target="_blank">https://play.golang.org/p/N9JvUXo7ugq</a>)</p>
+<p>As you can see, this will work only with slices of integers. In the link above you can find a more generic implementation. It uses reflection mechanism of Golang, which we didn't explore yet.<br />
+So, this function may look cumbersome, but let's take a look onto Ruby's <code>map</code> method under the hood:<br />
+[cpp]<br />
+static VALUE<br />
+rb_ary_collect(VALUE ary)<br />
+{<br />
+    long i;<br />
+    VALUE collect;</p>
+<p>    RETURN_SIZED_ENUMERATOR(ary, 0, 0, ary_enum_length);<br />
+    collect = rb_ary_new2(RARRAY_LEN(ary));<br />
+    for (i = 0; i &lt; RARRAY_LEN(ary); i++) {<br />
+        rb_ary_push(collect, rb_yield(RARRAY_AREF(ary, i)));<br />
+    }<br />
+    return collect;<br />
+}<br />
+[/cpp]</p>
+<p>Looks pretty similar, isn't it? Sure, in Ruby we don't work with types - that's the only difference. So, long story short, use <code>for</code> loops, that's the way to go.<br />
+But also one thing I want to mention is that there is a more convenient way to iterate through a collection, here how it looks like (works for both maps and arrays):<br />
+[cpp]<br />
+package main</p>
+<p>import (&quot;fmt&quot;)</p>
+<p>func main() {<br />
+	array := []int{1, 3, 5, 7}<br />
+	for i := range array {<br />
+	  fmt.Println(i * 2)<br />
+	}<br />
+}<br />
+[/cpp]<br />
+(<a href="https://play.golang.org/p/6g28EUCvQ6f" rel="noopener" target="_blank">https://play.golang.org/p/6g28EUCvQ6f</a>)</p>
+<h2>Hashes</h2>
+<p>One of the most heavily used data structures in Ruby is Hash.<br />
+Just kiddin, I have no idea, which is the most heavily used one. Let's take a look at these examples, where we apply a couple of useful functions to it:<br />
+[ruby]<br />
+2.2.1 :001 &gt; hash = { foo: 'bar', fizz: 'buzz', berlin: 'rain', munich: 'beer' }<br />
+ =&gt; {:foo=&gt;&quot;bar&quot;, :fizz=&gt;&quot;buzz&quot;, :berlin=&gt;&quot;rain&quot;, :munich=&gt;&quot;beer&quot;}<br />
+2.2.1 :003 &gt;<br />
+2.2.1 :004 &gt;   hash.values<br />
+ =&gt; [&quot;bar&quot;, &quot;buzz&quot;, &quot;rain&quot;, &quot;beer&quot;]<br />
+2.2.1 :005 &gt; hash.keys<br />
+ =&gt; [:foo, :fizz, :berlin, :munich]<br />
+2.2.1 :006 &gt;<br />
+2.2.1 :008 &gt; hash.values_at(:munich, :berlin)<br />
+ , &gt; [&quot;beer&quot;, &quot;rain&quot;]<br />
+[/ruby]</p>
+<p>Nothing magical, just retrieving all values, all keys, and values by multiple keys, should be easy-peasy?<br />
+[cpp]<br />
+package main</p>
+<p>import (&quot;fmt&quot;)</p>
+<p>func main() {<br />
+	hash := map[string]string{&quot;foo&quot;: &quot;bar&quot;, &quot;fizz&quot;: &quot;buzz&quot;, &quot;berlin&quot;: &quot;rain&quot;, &quot;munich&quot;: &quot;beer&quot;}<br />
+	fmt.Println(hash)</p>
+<p>	values := make([]string, 0, len(hash))<br />
+	for _, value := range hash {<br />
+		values = append(values, value)<br />
+	}<br />
+	fmt.Println(values)</p>
+<p>	keys := make([]string, 0, len(hash))<br />
+	for key := range hash {<br />
+		keys = append(keys, key)<br />
+	}<br />
+	fmt.Println(keys)</p>
+<p>	valuesAt := []string{hash[&quot;munich&quot;], hash[&quot;berlin&quot;]}<br />
+	fmt.Println(valuesAt)<br />
+}<br />
+[/cpp]<br />
+(<a href="https://play.golang.org/p/YN0xnhly-r9" rel="noopener" target="_blank">https://play.golang.org/p/YN0xnhly-r9</a>)<br />
+<img src="{{ site.baseurl }}/assets/2018/06/aww-300x298.png" alt="aww" width="300" height="298" class="aligncenter size-medium wp-image-648" /><br />
+I am honestly not sure about the last one, probably there is a way to make it more readable. But anyway, beauty of Go in it's straightforwardness :)</p>
+<h2>String</h2>
+<p>In Ruby, Strings can operate as arrays in most cases, but here we will pick a few string-specific methods:<br />
+[ruby]<br />
+2.2.1 :001 &gt; str = &quot; Star wars &quot;<br />
+ =&gt; &quot; Star wars &quot;<br />
+2.2.1 :002 &gt; str.upcase<br />
+ =&gt; &quot; STAR WARS &quot;<br />
+2.2.1 :003 &gt; str.downcase<br />
+ =&gt; &quot; star wars &quot;<br />
+2.2.1 :004 &gt; str.strip<br />
+ =&gt; &quot;Star wars&quot;<br />
+[/ruby]</p>
+<p>Nothing wow-like for Ruby, boring stuff, but let's check, what Golang has to offer for such basic things:</p>
+<p>[cpp]<br />
+package main</p>
+<p>import (<br />
+	&quot;fmt&quot;<br />
+	&quot;strings&quot;<br />
+)</p>
+<p>func main() {<br />
+	str := &quot; Star wars &quot;<br />
+	fmt.Println(str)<br />
+	fmt.Println(strings.ToLower(str))<br />
+	fmt.Println(strings.ToUpper(str))<br />
+	fmt.Println(strings.TrimSpace(str))<br />
+}<br />
+[/cpp]<br />
+(<a href="https://play.golang.org/p/9GvLs9yFIea" rel="noopener" target="_blank">https://play.golang.org/p/9GvLs9yFIea</a>)</p>
+<p>Bang-bang! Such a bliss! Actually, Golang has a pretty extensive set of methods for strings manipulation, you can find way more in their official documentation: <a href="https://golang.org/pkg/strings/" rel="noopener" target="_blank">https://golang.org/pkg/strings/</a></p>
+<h2>Conclusion</h2>
+<p>There are much more to discover, so start using Golang for your pet projects or for your actual projects at work, f.e. if you plan to have some simple Lambda function, it's a good place to introduce it, check out <a href="http://zonov.me/golang-for-rubyists-part-5-how-to-start-applying-golang-to-aws-lambda/" rel="noopener" target="_blank">my past blog post</a> on how to make it painlessly.<br />
+But for today that's it, thank you for reading.<br />
+If you don't want to miss the next posts, subscribe to my Twitter, tho I chat there for random topics, also I share some interesting posts I've discovered, as well as my own.<br />
+And psst, there is a big orange button beneath, using it, you can buy me an espresso macchiato, which I really love and will appreciate ;)</p>
+<p>P.S. Thanks Claude for coffee and pleasant feedback, it helps staying motivated!		</p>

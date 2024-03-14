@@ -1,0 +1,36 @@
+title: Kirill Zonov
+description: Software engineering, Entrepreneurship, Music
+
+url: https://zonov.me
+# Only necessary when hosting your site in a sub-directory. Project sites hosted on GitHub Pages are the common use-case of this variable.
+baseurl: # Ex: /project-page
+paginate_path: "blog/page:num/"
+permalink: blog/:title/
+
+# Header Option
+# header: large
+
+sass:
+    style: compressed
+
+markdown: kramdown
+highlighter: rouge
+plugins: [jekyll-paginate]
+paginate: 5
+
+navigation:
+    - title: Home
+      url: /index.html
+    - title: About
+      url: /_pages/about.html
+    - title: Mentoring
+      url: /_pages/engineering-mentoring.html
+    - title: Speaking engagements
+      url: /_pages/speaking-engagements.html
+
+social:
+    github: graffzon
+    email: graffzon@gmail.com
+    linkedin: kzonov
+
+google_analytics: "UA-TOADD"

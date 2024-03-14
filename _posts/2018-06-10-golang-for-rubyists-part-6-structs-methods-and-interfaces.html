@@ -1,0 +1,232 @@
+---
+layout: post
+title: Golang for Rubyists. Part 6. Structs, Methods and Interfaces
+date: 2018-06-10 16:36:57.000000000 +02:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Development
+tags:
+- development
+- golang
+- ruby
+meta:
+  _edit_last: '1'
+  _syntaxhighlighter_encoded: '1'
+  _adinserter_block_exceptions: ''
+  hefo_before: '0'
+  hefo_after: '0'
+  _aioseop_description: The sixth chapter of Golang for Rubyists blog series, in which
+    I help the reader to get the hang of statical typing approach to the Polymorphism,
+    Interfaces implementation and Structs with methods, which can be applied to them.
+  _aioseop_title: Golang for Rubyists. Structs, Methods, Interfaces
+author:
+  login: graffzon
+  email: graffzon@gmail.com
+  display_name: graffzon
+  first_name: ''
+  last_name: ''
+permalink: "/golang-for-rubyists-part-6-structs-methods-and-interfaces/"
+excerpt: "\n\t\t\t\t\t\t"
+---
+<p>
+				Let the force be with you, my friends. Today we will dive into some of the features, statical typing brings to us, those are Structs and Interfaces.<br />
+<!--more--><br />
+<img src="{{ site.baseurl }}/assets/2018/06/todd-quackenbush-701-unsplash-1024x832.jpg" alt="Photo by Todd Quackenbush on Unsplash" width="640" height="520" class="aligncenter size-large wp-image-636" /></p>
+<h2>Structs</h2>
+<p>As I aim my series of articles to those, who has mostly scripting languages background, such as Ruby, Python, JS, I would expect that you have a very brief understanding what those things are. In the best case, you remember that words from your Computer Science study in a university. Let's jump right into the code and take a look at some Struct definition example:</p>
+<p>[cpp]<br />
+package main</p>
+<p>import (<br />
+	&quot;fmt&quot;<br />
+)</p>
+<p>type User struct {<br />
+    name   string<br />
+    email  string<br />
+}</p>
+<p>func main() {<br />
+	u := User{name: &quot;Max&quot;, email: &quot;maxmustermann@fake.com&quot;}<br />
+	fmt.Println(&quot;Hello,&quot;, u.name)<br />
+}<br />
+[/cpp]</p>
+<p>(<a href="https://play.golang.org/p/FEQVAtNYig7" target="_blank" rel="noopener">https://play.golang.org/p/FEQVAtNYig7</a>)</p>
+<p>Doesn't it look similar to:</p>
+<p>[ruby]<br />
+class User<br />
+  attr_accessor :name<br />
+  attr_accessor :email<br />
+end</p>
+<p>u = User.new(name: &quot;Max&quot;, email: &quot;maxmustermann@fake.com&quot;)<br />
+p &quot;Hello, #{u.name}&quot;<br />
+[/ruby]</p>
+<p>By me, it looks pretty much. But as you may know, Ruby also has structs. Just because it is not statically typed we have two different structs, OpenStruct and Struct. And even the second one is still not as strict as Golang's one, because it doesn't have a type check. Anyway, the same snippet using Ruby's Struct would look like this:</p>
+<p>[ruby]<br />
+User = Struct.new(:name, :email)<br />
+u = User.new(name: &quot;Max&quot;, email: &quot;maxmustermann@fake.com&quot;)<br />
+p &quot;Hello, #{u.name}&quot;<br />
+[/ruby]</p>
+<p>Uh, I love Ruby's expressiveness and readability.<br />
+Go is quite more verbose, but as you may notice, it is pretty readable as well.<br />
+What else should we add to understand structs? I think it should be clear enough from the example. Struct is basically a combination of one or more named fields with specified types. Fields can be accessed using dot (.) for both reading and writing.</p>
+<h2>Methods</h2>
+<p>Let's take a look at one more Ruby example, which uses Struct:</p>
+<p>[ruby]<br />
+User = Struct.new(:first_name, :last_name) do<br />
+  def full_name<br />
+    &quot;#{first_name} #{last_name}&quot;<br />
+  end<br />
+end<br />
+[/ruby]</p>
+<p>How to implement something similar in Golang? Easy-peasy!</p>
+<p>[cpp]<br />
+package main</p>
+<p>import (<br />
+	&quot;fmt&quot;<br />
+)</p>
+<p>type User struct {<br />
+    first_name   string<br />
+    last_name  string<br />
+}</p>
+<p>func (u *User) full_name() string {<br />
+	return fmt.Sprintf(&quot;%s %s&quot;, u.first_name, u.last_name)<br />
+}</p>
+<p>func main() {<br />
+	u := User{first_name: &quot;Max&quot;, last_name: &quot;Mustermann&quot;}<br />
+	fmt.Println(&quot;Hello,&quot;, u.full_name())<br />
+}<br />
+[/cpp]</p>
+<p>(<a href="https://play.golang.org/p/RTaUjMnUXF6" target="_blank" rel="noopener">https://play.golang.org/p/RTaUjMnUXF6</a>)</p>
+<p>Could you ever imagine it? It looks exactly the same as Ruby's methods. And even the name is exactly the same, Methods! So, the method in Golang is a function, which related to some specific Struct and can be applied only to it (only? hmmmm)</p>
+<h2>Interfaces</h2>
+<p>Do you remember, what polymorphism is? Wiki says:<br />
+<code>Polymorphism - the provision of a single interface to entities of different types</code>.<br />
+And how do we achieve it with Ruby? Eh, actually multiple ways, <a href="https://robots.thoughtbot.com/back-to-basics-polymorphism-and-ruby" rel="noopener" target="_blank">this Thoughtbot's article</a> perfectly describes them. But in general case, Ruby has a duck typing system, so let's take a look on the following example:<br />
+[ruby]<br />
+class Dog<br />
+  attr_reader :hungry</p>
+<p>  def initialize<br />
+    @hungry = true<br />
+  end</p>
+<p>  def feed!<br />
+    p 'Making loud chewing noise'<br />
+    @hungry = false<br />
+  end</p>
+<p>  def bard<br />
+    p 'bark'<br />
+  end<br />
+end</p>
+<p>class Cat<br />
+  attr_reader :hungry</p>
+<p>  def initialize<br />
+    @hungry = true<br />
+  end</p>
+<p>  def feed!<br />
+    @hungry = false<br />
+  end</p>
+<p>  def meow<br />
+    p 'meow'<br />
+  end<br />
+end</p>
+<p>class AutoFeeder<br />
+  def self.feed_animal(animal)<br />
+    animal.feed!<br />
+  end<br />
+end</p>
+<p>dog = Dog.new<br />
+p dog.hungry<br />
+AutoFeeder.feed(dog)<br />
+p dog.hungry<br />
+[/ruby]<br />
+We have a class AutoFeeder which method expects something, which can be feeden (so, something, which implements interface "feed"). And since we're in Ruby, we don't have type checks, so we can just pass any object into this method and it either will perform the feeding operation or will fail with famous NoMethodError. And how can we achieve the same in Golang? As you remember, you should always specify a type for a function, so this snippet will work out:<br />
+[cpp]<br />
+package main</p>
+<p>import (<br />
+	&quot;fmt&quot;<br />
+)</p>
+<p>type Dog struct {<br />
+	hungry bool<br />
+}</p>
+<p>type Cat struct {<br />
+	hungry bool<br />
+}</p>
+<p>func (d *Dog) feed() bool {<br />
+	fmt.Println(&quot;Making loud chewing noise&quot;)<br />
+	d.hungry = false<br />
+	return d.hungry<br />
+}</p>
+<p>func (c *Cat) feed() bool {<br />
+	c.hungry = false<br />
+	return c.hungry<br />
+}</p>
+<p>func feed_animal(d *Dog) {<br />
+	d.feed()<br />
+}</p>
+<p>func main() {<br />
+	myFluffy := Dog{hungry: true}<br />
+	fmt.Println(myFluffy.hungry)<br />
+	feed_animal(&amp;myFluffy)<br />
+	fmt.Println(myFluffy.hungry)<br />
+}<br />
+[/cpp]</p>
+<p>But how to make it work for my poor hungry kitten as well? Can we just pass my cat into feed_animal function?<br />
+[cpp]<br />
+...<br />
+func main() {<br />
+	myHungryKitten := Cat{hungry: true}<br />
+	fmt.Println(myHungryKitten.hungry)<br />
+	feed_animal(&amp;myHungryKitten)<br />
+	fmt.Println(myHungryKitten.hungry)<br />
+}<br />
+[/cpp]<br />
+Ah, c'mon, ruthless static typing! <code>prog.go:33:14: cannot use &myHungryKitten (type *Cat) as type *Dog in argument to feed_animal</code><br />
+Thank gods, we have Interfaces! Let's first take a look onto the example and then I will explain everything.<br />
+[cpp]<br />
+package main</p>
+<p>import (<br />
+	&quot;fmt&quot;<br />
+)</p>
+<p>type Dog struct {<br />
+	hungry bool<br />
+}</p>
+<p>type Cat struct {<br />
+	hungry bool<br />
+}</p>
+<p>func (d *Dog) feed() bool {<br />
+	fmt.Println(&quot;Making loud chewing noise&quot;)<br />
+	d.hungry = false<br />
+	return d.hungry<br />
+}</p>
+<p>func (c *Cat) feed() bool {<br />
+	c.hungry = false<br />
+	return c.hungry<br />
+}</p>
+<p>type Animal interface {<br />
+	feed() bool<br />
+}</p>
+<p>func feed_animal(a Animal) {<br />
+	a.feed()<br />
+}</p>
+<p>func main() {<br />
+	myHungryKitten := Cat{hungry: true}<br />
+	fmt.Println(&quot;Feeding my kitty&quot;)<br />
+	feed_animal(&amp;myHungryKitten)<br />
+	fmt.Println(myHungryKitten.hungry)</p>
+<p>	myFluffy := Dog{hungry: true}<br />
+	fmt.Println(&quot;Feeding my puppy&quot;)<br />
+	feed_animal(&amp;myFluffy)<br />
+	fmt.Println(myFluffy.hungry)<br />
+}<br />
+[/cpp]<br />
+Just like that! Now both my pets are full and happy now, many thanks to Interfaces! So, I changed to things here.<br />
+Firstly I added an interface, named Animal. You see the syntax is very similar to the way you describe structs. But instead of defining attributes, you specify, which methods should the particular struct implement, in order to comply with this interface.<br />
+The second thing I changed is now <code>feed_animal</code> expects not a Dog pointer, but some struct, which implements the interface Animal.<br />
+(<a href="https://play.golang.org/p/8NlLiCZDr-R" target="_blank" rel="noopener">https://play.golang.org/p/8NlLiCZDr-R</a>)</p>
+<p>Few important things to mention about Interfaces in Golang.<br />
+1. Structs don't have to explicitly specify, that they implement some interface. It is checked implicitly by the interface itself.<br />
+2. One struct may implement multiple interfaces.</p>
+<p>Actually, interfaces topic is deeper than what I described in this article, but this information should be totally enough to understand them and to start using it.<br />
+Also, I hope methods and structs are clear for you now as well. Feel free to ask questions in the comments section or approach me via Twitter. Or even <a href="https://ko-fi.com/I2I2DEDW" rel="noopener" target="_blank">buy me a coffee</a> ^__^</p>
+<p>Good luck in your endless but immersive learning path!</p>
