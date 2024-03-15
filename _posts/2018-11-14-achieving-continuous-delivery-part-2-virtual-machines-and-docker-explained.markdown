@@ -33,7 +33,7 @@ author:
   first_name: ''
   last_name: ''
 permalink: "/achieving-continuous-delivery-part-2-virtual-machines-and-docker-explained/"
-excerpt: "\n\t\t\t\t\t\t"
+excerpt: "How are you doing, fellow developers? Ready to dockerize your first application? Or what about finding out, what “dockerize” actually means? Let’s start!"
 ---
 How are you doing, fellow developers? Ready to dockerize your first application? Or what about finding out, what
 "dockerize" actually means? Let's start!
