@@ -37,12 +37,12 @@ author:
   first_name: ''
   last_name: ''
 permalink: "/everydaydev-and-arangodb/"
-excerpt: "\n\t\t\t\t\t\t"
+excerpt: "Hello friends, please sit down and have a cup of tea, today we’re going to talk about ArangoDB. It is a database. Have you ever heard of it? I had not, until yesterday. But I came across a brilliant article from this database developers. Let me tell a few words about the database itself and about their article."
 ---
-<p>
-				Hello friends, please sit down and have a cup of tea, today we’re going to talk about ArangoDB. It is a database. Have you ever heard of it? I had not, until yesterday. But I came across a brilliant article from this database developers. Let me tell a few words about the database itself and about their article.</p>
-<p><!--more--></p>
-<p>I'm trying myself not only in writing, but also in speaking, so I have a youtube channel, where every day I try to share something interesting I learned or found out.<br />
-This time I found something so cool and so unknown for me, so I want to share it with you, it is an ArangoDB database, no more words, go and check out the video!</p>
-<p>You can also follow this link <a href="https://www.youtube.com/channel/UCjYpgu18Nd6Wngbwp47MHaA" target="_blank" rel="noopener">https://www.youtube.com/channel/UCjYpgu18Nd6Wngbwp47MHaA</a> to visit and subscribe to my channel. It will really motivate me to create more content :)</p>
-<p>https://youtu.be/vBzUGOddruk		</p>
+
+Hello friends, please sit down and have a cup of tea, today we’re going to talk about ArangoDB. It is a database. Have you ever heard of it? I had not, until yesterday. But I came across a brilliant article from this database developers. Let me tell a few words about the database itself and about their article.
+<!--more-->
+I'm trying myself not only in writing, but also in speaking, so I have a youtube channel, where every day I try to share something interesting I learned or found out.
+This time I found something so cool and so unknown for me, so I want to share it with you, it is an ArangoDB database, no more words, go and check out the video!
+You can also follow this link <a href="https://www.youtube.com/channel/UCjYpgu18Nd6Wngbwp47MHaA" target="_blank" rel="noopener">https://www.youtube.com/channel/UCjYpgu18Nd6Wngbwp47MHaA</a> to visit and subscribe to my channel. It will really motivate me to create more content :)
+[https://youtu.be/vBzUGOddruk](https://youtu.be/vBzUGOddruk)		

@@ -23,13 +23,13 @@ author:
 permalink: "/terraform-provider-for-code-climate-is-open-sourced/"
 excerpt: "I contributed in a few open-source projects during my career, however, I'm particularly proud of this one."
 ---
-<p>I have contributed to several open-source projects throughout my career, but there is one in particular that I hold
-  in high regard.</p>
-<p>This Terraform provider was developed during my work at Babbel, and we made the decision to open-source it.
-  Impressively, it has been recognized and listed on the official Terraform community providers page.</p>
-<p>For a comprehensive announcement and a detailed article discussing our motivations and the challenges we faced,
+I have contributed to several open-source projects throughout my career, but there is one in particular that I hold
+  in high regard.
+This Terraform provider was developed during my work at Babbel, and we made the decision to open-source it.
+  Impressively, it has been recognized and listed on the official Terraform community providers page.
+For a comprehensive announcement and a detailed article discussing our motivations and the challenges we faced,
   please visit Babbel's blog: <a
     href="https://bytes.babbel.com/en/articles/2019-06-13-open-source-terraform-provider-for-codeclimate.html"
     target="_blank"
     rel="noopener noreferrer">https://bytes.babbel.com/en/articles/2019-06-13-open-source-terraform-provider-for-codeclimate.html</a>
-</p>
+
