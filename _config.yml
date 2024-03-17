@@ -20,7 +20,7 @@ paginate: 5
 
 navigation:
     - title: Home
-      url: /index.html
+      url: /index
     - title: About
       url: /about/
     - title: Contact
@@ -28,13 +28,11 @@ navigation:
 
 extended_navigation:
     - title: Home
-      url: /index.html
+      url: /index
     - title: About
       url: /about/
-    - title: Mentoring
-      url: /_pages/engineering-mentoring.html
     - title: Speaking engagements
-      url: /_pages/speaking-engagements.html
+      url: /speaking/
     - title: Contact
       url: /contact/
 
