@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: generic_page
 title: Speaking engagements
 date: 2019-11-10 18:54:10.000000000 +01:00
 type: page
@@ -20,7 +20,7 @@ author:
   display_name: graffzon
   first_name: ''
   last_name: ''
-permalink: "/speaking-engagements/"
+permalink: "/speaking/"
 excerpt: "\n\t\t\t\t\t\t"
 ---
 <p>
