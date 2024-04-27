@@ -8,6 +8,6 @@ I am a software engineer with a specialization in Site Reliability Engineering a
 
 In addition to my technical pursuits, I am passionate about entrepreneurship. You can discover more about my business and entrepreneurial endeavors in the Entrepreneurship section here: [Entrepreneurship](/entrepreneurship/)
 
-Family is central to my life, and in my spare time, I cherish cycling and creating music. If you're interested in exploring my musical creations, please visit this link to listen to some of my tracks: [Locked in a box](https://distrokid.com/hyperfollow/iliili/locked-in-a-box)
+Family is central to my life, and in my spare time, I cherish cycling and creating music. If you're interested in exploring my musical creations, please visit this link to listen to some of my tracks: [Locked in a box](https://distrokid.com/hyperfollow/iliili/locked-in-a-box) or consider subscribing to my [Instagram](https://instagram.com/ili.ili.music).
 
 I am available for consulting and freelance projects, as well as artistic and business collaborations. Please feel free to reach out to me using the contact page: [Contact](/contact/)
