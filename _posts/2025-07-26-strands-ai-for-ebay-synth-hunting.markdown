@@ -503,6 +503,12 @@ boto3>=1.34.0
 
 The complete working code example can be found in my public repository: https://github.com/kzonov/kleinanzaigen-synth-finder
 
+## Result
+
+Below is the real result I received from my Telegram bot. Getting on my bike, wait for me, my OP-1!
+
+![Screenshot from a telegram bot](/assets/2025/07/telegram-result.png)
+
 ## Notes
 
 I didn't go deep explaining the Terraform and Docker parts, as it isn't the idea of this post and I assume you're already familiar with these tools.
