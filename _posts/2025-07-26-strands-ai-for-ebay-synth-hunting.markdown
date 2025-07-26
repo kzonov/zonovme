@@ -1,6 +1,43 @@
-# My First Dive into Agentic AI: Building a Smart Shopping Assistant with Strands
+---
+layout: post
+title: "My Dive into Agentic AI: Building a Smart Shopping Assistant with Strands"
+date: 2025-07-26 17:00:00.000000000 +02:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- AI & Automation
+- DevOps
+tags:
+- AI agents
+- Strands
+- AWS Bedrock
+- automation
+- web scraping
+- Python
+- Docker
+- Terraform
+meta:
+  _edit_last: '1'
+  hefo_before: '0'
+  hefo_after: '0'
+author:
+  login: graffzon
+  email: graffzon@gmail.com
+  display_name: graffzon
+  first_name: ''
+  last_name: ''
+permalink: "/strands-ai-for-ebay-synth-hunting/"
+excerpt: "Building an AI agent using Strands AI framework to automatically hunt for Teenage Engineering OP-1 synthesizers on eBay Kleinanzeigen. A DevOps engineer's journey into agentic AI for smart automation."
+---
+
+# My Dive into Agentic AI: Building a Smart Shopping Assistant with Strands
 
 As a DevOps engineer, I'm always looking for ways to automate repetitive tasks. Recently, I stumbled upon a perfect use case: hunting for a **Teenage Engineering OP-1** synthesizer on eBay Kleinanzeigen. These funny music devices rarely drop below €500, and finding one in good condition near Berlin requires constantly checking listings. Instead of manually refreshing the page every few hours, I decided to build my first AI agent using [Strands](https://github.com/strands-agents/sdk-python).
+
+
 
 ## The Problem: Manual Marketplace Monitoring
 
