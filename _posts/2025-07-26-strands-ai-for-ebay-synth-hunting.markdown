@@ -29,7 +29,7 @@ author:
   display_name: graffzon
   first_name: ''
   last_name: ''
-permalink: "/strands-ai-for-ebay-synth-hunting/"
+permalink: "/strands-ai-for-synth-hunting/"
 excerpt: "Building an AI agent using Strands AI framework to automatically hunt for Teenage Engineering OP-1 synthesizers on eBay Kleinanzeigen. A DevOps engineer's journey into agentic AI for smart automation."
 ---
 
@@ -80,7 +80,7 @@ import re
 
 # Hardcoded scraping - breaks when HTML changes
 def check_ebay_kleinanzeigen():
-    response = requests.get("https://www.ebay-kleinanzeigen.de/s-musik/berlin/op-1/k0c74l3331")
+    response = requests.get("https://www.kleinanzeigen.de/s-musik/berlin/op-1/k0c74l3331")
     soup = BeautifulSoup(response.content, 'html.parser')
     
     # Brittle CSS selectors
@@ -227,7 +227,7 @@ from strands.models.bedrock import BedrockModel
 # Create the AI model
 model = BedrockModel(
     model_id="eu.anthropic.claude-3-7-sonnet-20250219-v1:0",
-    region="eu-central-1"
+    region="eu-west-1"
 )
 
 # System prompt with clear instructions
@@ -238,7 +238,7 @@ TASK: Find Teenage Engineering OP-1 synthesizers that meet these criteria:
 - Price under €500
 - Condition described as "good", "very good", "excellent", or "like new"
 - NO issues, defects, or problems mentioned in description
-- Located within 50km of Berlin (PLZ 10000-14999 or nearby cities)
+- Located within 50km of Berlin (PLZ 10000-14999 or nearby cities like Potsdam, Brandenburg)
 - Currently available (not marked as sold/reserved)
 
 PROCESS:
@@ -246,9 +246,20 @@ PROCESS:
 2. For each listing that seems promising:
    - Check the individual listing page for full details
    - Evaluate against all criteria carefully
-   - If it matches, send notification with title, price, condition, location, and URL
+   - If it matches, send notification with:
+     * Title and brief description
+     * Price and condition
+     * Location
+     * Direct link to listing
+     * Reason why it matches criteria
 
-Be thorough but only notify for genuine matches to avoid spam. Check only the first page of search results.
+Be thorough but only notify for genuine matches to avoid spam. Check not more than 5 listings.
+
+IMPORTANT: Be verbose about your process. Log what you're doing:
+- "Browsing search results page..."
+- "Found X listings, checking each one..."
+- "Checking listing: {title}..."
+- "This listing matches/doesn't match because..."
 
 TOOLS AVAILABLE:
 - browse_website (web browsing)
@@ -382,7 +393,7 @@ resource "aws_iam_role_policy" "lambda_secrets_access" {
   })
 }
 
-# Bedrock access for AI model
+# Bedrock access for AI model. The access might be too broad, better to be refined
 resource "aws_iam_role_policy" "lambda_bedrock_access" {
   name = "lambda-bedrock-access"
   role = aws_iam_role.op1_finder_lambda_role.id
@@ -392,8 +403,8 @@ resource "aws_iam_role_policy" "lambda_bedrock_access" {
     Statement = [
       {
         Effect   = "Allow"
-        Action   = ["bedrock:InvokeModel", "bedrock:InvokeModelWithResponseStream"]
-        Resource = "arn:aws:bedrock:eu-central-1::foundation-model/anthropic.claude-3-5-sonnet-20241022-v2:0"
+        Action   = ["bedrock:*"]
+        Resource = "*"
       }
     ]
   })
@@ -483,14 +494,20 @@ CMD ["handler.lambda_handler"]
 
 ```txt
 strands-agents>=1.1.0
-requests
-beautifulsoup4
-boto3
+requests>=2.31.0
+beautifulsoup4>=4.12.0
+boto3>=1.34.0 
 ```
+
+## The complete code
+
+The complete working code example can be found in my public repository: https://github.com/kzonov/kleinanzaigen-synth-finder
 
 ## Notes
 
 I didn't go deep explaining the Terraform and Docker parts, as it isn't the idea of this post and I assume you're already familiar with these tools.
+
+If you're using AWS Bedrock for the first time, it may require you to manually enable the model you're going to use. You can do it in the AWS Management Console by navigating go the Bedrock section.
 
 ## Conclusion
 
@@ -505,6 +522,5 @@ Whether you're hunting for synthesizers, monitoring job boards, or tracking inve
 - [Strands Documentation](https://strands-agents.github.io/sdk-python/)
 - [AWS Bedrock Models](https://docs.aws.amazon.com/bedrock/latest/userguide/model-ids.html)
 - [AWS Lambda Container Images](https://docs.aws.amazon.com/lambda/latest/dg/images-create.html)
-- [Terraform AWS Provider](https://registry.terraform.io/providers/hashicorp/aws/latest/docs)
 
 *Happy hunting! 🎹* 
