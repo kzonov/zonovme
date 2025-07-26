@@ -33,7 +33,7 @@ permalink: "/strands-ai-for-ebay-synth-hunting/"
 excerpt: "Building an AI agent using Strands AI framework to automatically hunt for Teenage Engineering OP-1 synthesizers on eBay Kleinanzeigen. A DevOps engineer's journey into agentic AI for smart automation."
 ---
 
-# My Dive into Agentic AI: Building a Smart Shopping Assistant with Strands
+![Teenage Engineering OP-1 in a good condition](/assets/2025/07/op-1-in-good-condition.png)
 
 As a DevOps engineer, I'm always looking for ways to automate repetitive tasks. Recently, I stumbled upon a perfect use case: hunting for a **Teenage Engineering OP-1** synthesizer on eBay Kleinanzeigen. These funny music devices rarely drop below €500, and finding one in good condition near Berlin requires constantly checking listings. Instead of manually refreshing the page every few hours, I decided to build my first AI agent using [Strands](https://github.com/strands-agents/sdk-python).
 
@@ -110,7 +110,7 @@ from strands.models.bedrock import BedrockModel
 
 # Natural language instructions
 agent = Agent(
-    model=BedrockModel(model_id="eu.anthropic.claude-3-5-sonnet-20241022-v2:0"),
+    model=BedrockModel(model_id="eu.anthropic.claude-3-7-sonnet-20250219-v1:0"),
     system_prompt="""
     Find Teenage Engineering OP-1 synthesizers on eBay Kleinanzeigen:
     - Price under €500
@@ -226,7 +226,7 @@ from strands.models.bedrock import BedrockModel
 
 # Create the AI model
 model = BedrockModel(
-    model_id="eu.anthropic.claude-3-5-sonnet-20241022-v2:0",
+    model_id="eu.anthropic.claude-3-7-sonnet-20250219-v1:0",
     region="eu-central-1"
 )
 
@@ -287,7 +287,7 @@ def lambda_handler(event, context):
     
     try:
         # Create agent (same as Step 3)
-        model = BedrockModel(model_id="eu.anthropic.claude-3-5-sonnet-20241022-v2:0")
+        model = BedrockModel(model_id="eu.anthropic.claude-3-7-sonnet-20250219-v1:0")
         agent = Agent(
             model=model,
             system_prompt=SYSTEM_PROMPT,
