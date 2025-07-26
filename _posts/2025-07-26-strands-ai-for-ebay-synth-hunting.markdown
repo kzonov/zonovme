@@ -501,7 +501,7 @@ boto3>=1.34.0
 
 ## The complete code
 
-The complete working code example can be found in my public repository: https://github.com/kzonov/kleinanzaigen-synth-finder
+The complete working code example can be found in my public repository: [https://github.com/kzonov/kleinanzaigen-synth-finder](https://github.com/kzonov/kleinanzaigen-synth-finder)
 
 ## Result
 
