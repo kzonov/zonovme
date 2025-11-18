@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <title>Tabu / Guess It – Deutscher Wortschatz</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      color-scheme: light dark;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at top, #f9fafb, #e5e7eb);
+    }
+
+    .card {
+      background: white;
+      max-width: 540px;
+      width: 90vw;
+      padding: 24px 28px 28px;
+      border-radius: 16px;
+      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.16);
+      text-align: center;
+      border: 1px solid #e5e7eb;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      body {
+        background: radial-gradient(circle at top, #020617, #020617);
+      }
+      .card {
+        background: #020617;
+        color: #f9fafb;
+        border-color: #1f2937;
+      }
+    }
+
+    h1 {
+      font-size: 1.4rem;
+      margin: 0 0 0.5rem;
+    }
+
+    .subtitle {
+      font-size: 0.9rem;
+      color: #6b7280;
+      margin-bottom: 1.2rem;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .subtitle {
+        color: #9ca3af;
+      }
+    }
+
+    .word-box {
+      margin: 12px auto 16px;
+      padding: 20px 16px;
+      border-radius: 12px;
+      border: 2px dashed #d1d5db;
+      min-height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: none;
+      background: #f9fafb;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .word-box {
+        border-color: #4b5563;
+        background: #020617;
+      }
+    }
+
+    .placeholder {
+      font-size: 1rem;
+      font-weight: 500;
+      color: #9ca3af;
+      letter-spacing: 0.02em;
+    }
+
+    button {
+      margin-top: 4px;
+      padding: 10px 18px;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 999px;
+      border: none;
+      background: #2563eb;
+      color: white;
+      cursor: pointer;
+      transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.2s ease;
+      box-shadow: 0 8px 18px rgba(37, 99, 235, 0.35);
+    }
+
+    button:hover {
+      background: #1d4ed8;
+      transform: translateY(-1px);
+      box-shadow: 0 10px 24px rgba(37, 99, 235, 0.5);
+    }
+
+    button:active {
+      transform: translateY(0);
+      box-shadow: 0 4px 10px rgba(37, 99, 235, 0.4);
+    }
+
+    .info {
+      margin-top: 12px;
+      font-size: 0.85rem;
+      color: #6b7280;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .info {
+        color: #9ca3af;
+      }
+    }
+
+    .counter {
+      font-weight: 600;
+    }
+
+    .controls {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 10px;
+      font-size: 0.85rem;
+      color: #6b7280;
+    }
+
+    .controls label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+
+    .controls input {
+      cursor: pointer;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .controls {
+        color: #9ca3af;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Tabu / Guess It – Deutsch</h1>
+    <div class="subtitle">
+      Eine Person sieht das Wort und beschreibt es, die anderen raten.
+    </div>
+
+    <div id="wordBox" class="word-box">
+      <span class="placeholder">Auf „Nächstes Wort“ klicken, um zu starten</span>
+    </div>
+
+    <button id="nextBtn">Nächstes Wort</button>
+
+    <div class="controls">
+      <label>
+        <input type="checkbox" id="reshuffleOnEnd" checked />
+        Nach letztem Wort neu mischen
+      </label>
+      <label>
+        <input type="checkbox" id="hideCounter" />
+        Zähler ausblenden
+      </label>
+    </div>
+
+    <div id="info" class="info">
+      <span class="counter" id="counter">0 / 0</span>
+      &nbsp;Wörter gezeigt
+    </div>
+  </div>
+
+  <script>
+    // Großer Wortschatz mit häufigen, kindgerechten deutschen Nomen.
+    // Du kannst einfach weitere Wörter unten ergänzen.
+
+    const words = [
+      // Schule & Familie
+      "Kind", "Mutter", "Vater", "Eltern", "Familie", "Bruder", "Schwester",
+      "Oma", "Opa", "Freund", "Freundin", "Lehrer", "Lehrerin", "Schüler",
+      "Schülerin", "Klasse", "Schule", "Hausmeister", "Direktor", "Direktorin",
+      "Heft", "Buch", "Stift", "Bleistift", "Kugelschreiber", "Radiergummi",
+      "Lineal", "Rucksack", "Federmappe", "Tafel", "Kreide", "Computer",
+      "Laptop", "Tablet", "Bildschirm", "Tisch", "Stuhl", "Bank", "Fenster",
+      "Tür",
+
+      // Zuhause
+      "Haus", "Wohnung", "Zimmer", "Küche", "Bad", "Bett", "Schrank",
+      "Lampe", "Teppich", "Boden", "Decke", "Wand", "Treppenhaus", "Garten",
+      "Balkon", "Garage", "Keller", "Flur", "Türklinke", "Schlüssel",
+
+      // Stadt & Orte
+      "Stadt", "Dorf", "Straße", "Platz", "Park", "Spielplatz", "Brücke",
+      "Kirche", "Rathaus", "Supermarkt", "Laden", "Bäcker", "Metzger",
+      "Apotheke", "Post", "Bahnhof", "Haltestelle", "Bushaltestelle",
+      "Flughafen", "Bibliothek",
+
+      // Verkehr
+      "Auto", "Bus", "Zug", "Fahrrad", "Roller", "U-Bahn", "Straßenbahn",
+      "Schiff", "Boot", "Flugzeug", "Taxi", "Motor", "Lenkrad", "Reifen",
+      "Bremse", "Ampel", "Zebrastreifen", "Fahrer", "Beifahrer", "Fahrkarte",
+
+      // Zeit & Jahreszeiten
+      "Tag", "Nacht", "Morgen", "Abend", "Mittag", "Woche", "Monat", "Jahr",
+      "Ferien", "Urlaub", "Stunde", "Minute", "Sekunde", "Frühling",
+      "Sommer", "Herbst", "Winter", "Montag", "Dienstag", "Mittwoch",
+      "Donnerstag", "Freitag", "Samstag", "Sonntag", "Uhr", "Kalender",
+      "Datum", "Geburtstag", "Feier", "Fest", "Weihnachten", "Ostern",
+      "Silvester", "Pause", "Stundenplan", "Wecker", "Glocke",
+
+      // Tiere
+      "Hund", "Katze", "Maus", "Vogel", "Pferd", "Kuh", "Schaf", "Schwein",
+      "Huhn", "Hase", "Kaninchen", "Ente", "Gans", "Fisch", "Bär", "Löwe",
+      "Tiger", "Affe", "Elefant", "Giraffe", "Zebra", "Krokodil", "Frosch",
+      "Igel", "Fuchs", "Wolf", "Biene", "Wespe", "Schmetterling", "Käfer",
+      "Ameise", "Spinne", "Eule", "Rabe", "Pinguin", "Delfin", "Wal",
+      "Robbe", "Koala", "Panda", "Zoo",
+
+      // Essen & Trinken
+      "Apfel", "Birne", "Banane", "Orange", "Mandarine", "Traube", "Kirsche",
+      "Pfirsich", "Pflaume", "Erdbeere", "Himbeere", "Brombeere", "Melone",
+      "Ananas", "Zitrone", "Tomate", "Gurke", "Karotte", "Kartoffel",
+      "Zwiebel", "Salat", "Brokkoli", "Paprika", "Pilz", "Brot", "Brötchen",
+      "Käse", "Wurst", "Schinken", "Ei", "Butter", "Marmelade", "Honig",
+      "Zucker", "Salz", "Pfeffer", "Nudeln", "Reis", "Pizza", "Suppe",
+      "Kuchen", "Torte", "Keks", "Schokolade", "Bonbon", "Eis", "Milch",
+      "Wasser", "Saft", "Tee", "Kakao", "Limo", "Frühstück", "Mittagessen",
+      "Abendessen", "Teller", "Glas", "Messer", "Gabel", "Löffel",
+
+      // Spielzeug & Spiele
+      "Ball", "Puppe", "Teddy", "Puzzle", "Spiel", "Würfel", "Karte",
+      "Baustein", "Lego", "Seil", "Schaukel", "Rutsche", "Sandkasten",
+      "Kreisel", "Brettspiel", "Videospiel", "Comicheft", "Figur", "Fernglas",
+      "Spielzeug",
+
+      // Sport & Bewegung
+      "Fußball", "Handball", "Basketball", "Tennis", "Volleyball",
+      "Tischtennis", "Schwimmen", "Laufen", "Sprung", "Torwart",
+      "Mannschaft", "Trainer", "Trikot", "Sportschuh", "Turnschuh", "Helm",
+      "Fahrradhelm", "Skateboard", "Ski", "Snowboard",
+
+      // Natur & Wetter
+      "Blume", "Baum", "Busch", "Gras", "Wiese", "Wald", "Blatt", "Ast",
+      "Zweig", "Stamm", "Wurzel", "Teich", "See", "Fluss", "Bach", "Meer",
+      "Ozean", "Strand", "Insel", "Berg", "Hügel", "Tal", "Himmel", "Wolke",
+      "Regen", "Schnee", "Wind", "Sturm", "Gewitter", "Blitz", "Donner",
+      "Sonne", "Schatten", "Nebel", "Regenbogen", "Stern", "Mond", "Planet",
+      "Erde",
+
+      // Körper & Kleidung
+      "Kopf", "Hand", "Arm", "Bein", "Fuß", "Finger", "Daumen", "Auge",
+      "Ohr", "Nase", "Mund", "Zahn", "Herz", "Bauch", "Rücken", "Schulter",
+      "Knie", "Ellbogen", "Haut", "Körper",
+      "Hemd", "Hose", "Rock", "Kleid", "Jacke", "Mantel", "Pullover",
+      "T-Shirt", "Bluse", "Schuh", "Stiefel", "Socke", "Mütze", "Hut",
+      "Schal", "Handschuh", "Brille", "Gürtel", "Regenschirm", "Anzug",
+
+      // Medien & Kunst
+      "Musik", "Lied", "Stimme", "Gitarre", "Klavier", "Trommel", "Flöte",
+      "Geige", "Radio", "Fernseher", "Film", "Foto", "Kamera", "Bild",
+      "Zeichnung", "Malerei", "Farbe", "Pinsel", "Zettel",
+
+      // Sprache & Geschichten
+      "Zeitung", "Zeitschrift", "Seite", "Wörterbuch", "Sprache", "Wort",
+      "Satz", "Buchstabe", "Geschichte", "Märchen", "Held", "Prinzessin",
+      "Drache", "Zauberer", "Hexe", "Feuer", "Luft", "Element", "Stein",
+
+      // Geld & Dinge
+      "Gold", "Silber", "Geld", "Münze", "Schein", "Portemonnaie",
+      "Taschengeld", "Preis", "Markt", "Geschenk", "Paket", "Brief",
+      "Stempel", "Fotoalbum", "Handy", "Telefon", "Nummer", "Adresse",
+
+      // Gesundheit & Sicherheit
+      "Arzt", "Ärztin", "Krankenhaus", "Praxis", "Medizin", "Tablette",
+      "Pflaster", "Verband", "Fieber", "Husten", "Schnupfen", "Impfung",
+      "Unfall", "Polizei", "Feuerwehr", "Feuerwehrmann", "Feuerwehrfrau",
+      "Gefahr", "Warnschild", "Notruf",
+
+      // Computer & Internet
+      "Computermaus", "Tastatur", "Programm", "Spieler", "Punkt", "Level",
+      "Internet", "Webseite", "Passwort", "Benutzer", "E-Mail", "Nachricht",
+      "Chat", "Ordner", "Drucker", "Scanner", "Datei", "Papierkorb",
+      "Symbol", "Bildschirmfoto",
+
+      // Weitere Orte & Alltag
+      "Museum", "Kino", "Theater", "Restaurant", "Café", "Schwimmbad",
+      "Turnhalle", "Marktplatz", "Spielzeugladen", "Blumenladen", "Frisör",
+      "Büro", "Werkstatt", "Baustelle", "Farm", "Bauernhof", "Kindergarten",
+      "Krippe", "Klassenraum", "Schulhof", "Mensa", "Treppe", "Aufzug",
+      "Rolltreppe", "Spiegel", "Seife", "Handtuch", "Zahnbürste",
+      "Zahnpasta", "Kamm", "Bürste", "Kleber", "Schere", "Notizbuch",
+      "Kalenderblatt"
+    ];
+
+    // --- Spiel-Logik ---
+
+    const wordBox = document.getElementById("wordBox");
+    const nextBtn = document.getElementById("nextBtn");
+    const counterEl = document.getElementById("counter");
+    const infoEl = document.getElementById("info");
+    const reshuffleOnEnd = document.getElementById("reshuffleOnEnd");
+    const hideCounter = document.getElementById("hideCounter");
+
+    // Fisher-Yates Shuffle
+    function shuffle(a) {
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+    }
+
+    shuffle(words);
+
+    let index = 0;
+    let shown = 0;
+
+    function updateCounter() {
+      if (hideCounter.checked) {
+        infoEl.style.visibility = "hidden";
+      } else {
+        infoEl.style.visibility = "visible";
+        counterEl.textContent = `${shown} / ${words.length}`;
+      }
+    }
+
+    function showNextWord() {
+      if (words.length === 0) return;
+
+      if (index >= words.length) {
+        if (reshuffleOnEnd.checked) {
+          shuffle(words);
+        }
+        index = 0;
+        shown = 0;
+      }
+
+      const word = words[index];
+      index++;
+      shown++;
+
+      wordBox.textContent = word;
+      wordBox.classList.remove("placeholder");
+      updateCounter();
+    }
+
+    nextBtn.addEventListener("click", showNextWord);
+    reshuffleOnEnd.addEventListener("change", updateCounter);
+    hideCounter.addEventListener("change", updateCounter);
+
+    // Initial counter state
+    shown = 0;
+    updateCounter();
+  </script>
+</body>
+</html>
