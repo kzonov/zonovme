@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="de">
+
 <head>
   <meta charset="UTF-8" />
-  <title>Tabu / Guess It – Deutscher Wortschatz</title>
+  <title>Tabu / Guess It – Deutsch (Kinder & Erwachsene)</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     :root {
@@ -23,8 +24,8 @@
 
     .card {
       background: white;
-      max-width: 540px;
-      width: 90vw;
+      max-width: 620px;
+      width: 92vw;
       padding: 24px 28px 28px;
       border-radius: 16px;
       box-shadow: 0 16px 40px rgba(15, 23, 42, 0.16);
@@ -36,6 +37,7 @@
       body {
         background: radial-gradient(circle at top, #020617, #020617);
       }
+
       .card {
         background: #020617;
         color: #f9fafb;
@@ -45,18 +47,44 @@
 
     h1 {
       font-size: 1.4rem;
-      margin: 0 0 0.5rem;
+      margin: 0 0 0.25rem;
     }
 
     .subtitle {
       font-size: 0.9rem;
       color: #6b7280;
-      margin-bottom: 1.2rem;
+      margin-bottom: 1rem;
     }
 
     @media (prefers-color-scheme: dark) {
       .subtitle {
         color: #9ca3af;
+      }
+    }
+
+    .top-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 10px;
+      font-size: 0.9rem;
+    }
+
+    select {
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid #d1d5db;
+      font-size: 0.9rem;
+      background: #f9fafb;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      select {
+        background: #020617;
+        border-color: #4b5563;
+        color: #f9fafb;
       }
     }
 
@@ -138,6 +166,7 @@
       margin-top: 10px;
       font-size: 0.85rem;
       color: #6b7280;
+      flex-wrap: wrap;
     }
 
     .controls label {
@@ -156,8 +185,13 @@
         color: #9ca3af;
       }
     }
+
+    .mode-label {
+      font-weight: 600;
+    }
   </style>
 </head>
+
 <body>
   <div class="card">
     <h1>Tabu / Guess It – Deutsch</h1>
@@ -165,8 +199,16 @@
       Eine Person sieht das Wort und beschreibt es, die anderen raten.
     </div>
 
+    <div class="top-row">
+      <span class="mode-label">Modus:</span>
+      <select id="modeSelect">
+        <option value="kids">Kinder (Grundschule)</option>
+        <option value="adult">Erwachsene (B1–B2)</option>
+      </select>
+    </div>
+
     <div id="wordBox" class="word-box">
-      <span class="placeholder">Auf „Nächstes Wort“ klicken, um zu starten</span>
+      <span class="placeholder">Modus wählen und auf „Nächstes Wort“ klicken</span>
     </div>
 
     <button id="nextBtn">Nächstes Wort</button>
@@ -184,15 +226,13 @@
 
     <div id="info" class="info">
       <span class="counter" id="counter">0 / 0</span>
-      &nbsp;Wörter gezeigt
+      &nbsp;Wörter gezeigt (Kinder)
     </div>
   </div>
 
   <script>
-    // Großer Wortschatz mit häufigen, kindgerechten deutschen Nomen.
-    // Du kannst einfach weitere Wörter unten ergänzen.
-
-    const words = [
+    // ---------------- Kinder-Version (wie vorher) ----------------
+    const childWords = [
       // Schule & Familie
       "Kind", "Mutter", "Vater", "Eltern", "Familie", "Bruder", "Schwester",
       "Oma", "Opa", "Freund", "Freundin", "Lehrer", "Lehrerin", "Schüler",
@@ -310,7 +350,199 @@
       "Kalenderblatt"
     ];
 
-    // --- Spiel-Logik ---
+    // ---------------- Erwachsenen-Version (B1–B2, ~1000 Nomen) ----------------
+    // Thematisch breit: Arbeit, Studium, Politik, Gesellschaft, Technik, Kultur, Umwelt, usw.
+
+    const adultWords = [
+      // Arbeit & Beruf
+      "Arbeitsplatz", "Kollege", "Kollegin", "Abteilung", "Bewerbung",
+      "Vorstellungsgespräch", "Lebenslauf", "Stellenanzeige", "Berufserfahrung",
+      "Fortbildung", "Kündigung", "Vertrag", "Vollzeit", "Teilzeit", "Schichtdienst",
+      "Gehalt", "Lohn", "Steuer", "Büro", "Besprechung", "Konferenz", "Meeting",
+      "Projekt", "Frist", "Termin", "Chef", "Chefin", "Leitung", "Praktikum",
+      "Werkstudent", "Werkstudentin", "Gewerkschaft", "Betrieb", "Industrie",
+      "Handwerk", "Dienstleistung", "Arbeitsmarkt", "Büromaterial", "Kopierer",
+      "Druckerpatrone", "Visitenkarte", "Kundendienst", "Kunde", "Kundin",
+      "Verkauf", "Verkäufer", "Verkäuferin", "Service", "Verhandlung",
+      "Rechnung", "Mahnung", "Überweisung", "Kontoauszug",
+
+      // Ausbildung & Studium
+      "Ausbildung", "Auszubildender", "Auszubildende", "Prüfung", "Klausur",
+      "Zeugnis", "Note", "Fach", "Semester", "Vorlesung", "Seminar",
+      "Dozent", "Dozentin", "Professor", "Professorin", "Studium", "Studierende",
+      "Hochschule", "Universität", "Bibliothek", "Fachbereich", "Stipendium",
+      "Studiengebühr", "Hausarbeit", "Abschlussarbeit", "Bachelor", "Master",
+      "Doktorarbeit", "Forschungsprojekt", "Labor", "Experiment", "Ergebnis",
+      "Hypothese", "Methode", "Theorie", "Praxis", "Lernstrategie",
+      "Sprachkurs", "Sprachniveau", "Grammatik", "Wortschatz", "Aussprache",
+
+      // Politik & Gesellschaft
+      "Regierung", "Parlament", "Minister", "Ministerin", "Bundeskanzler",
+      "Bundeskanzlerin", "Bundespräsident", "Bundespräsidentin", "Wahl",
+      "Stimme", "Abstimmung", "Mehrheit", "Minderheit", "Partei", "Opposition",
+      "Koalition", "Gesetz", "Regelung", "Verordnung", "Verfassung",
+      "Demokratie", "Diktatur", "Freiheit", "Gleichheit", "Gerechtigkeit",
+      "Menschenrecht", "Flüchtling", "Einwanderung", "Integration",
+      "Migration", "Asyl", "Bürger", "Bürgerin", "Staatsangehörigkeit",
+      "Behörde", "Amt", "Formular", "Antrag", "Genehmigung", "Ausweis",
+      "Reisepass", "Meldebestätigung", "Terminvereinbarung", "Nachweis",
+      "Unterschrift",
+
+      // Wirtschaft & Geld
+      "Wirtschaft", "Konjunktur", "Inflation", "Deflation", "Arbeitslosigkeit",
+      "Börse", "Aktie", "Investment", "Kredit", "Schuld", "Ratenzahlung",
+      "Zins", "Sparkonto", "Girokonto", "Bankkarte", "Geldautomat",
+      "Überweisungsträger", "Onlinebanking", "Haushalt", "Budget", "Einnahme",
+      "Ausgabe", "Versicherung", "Krankenversicherung", "Haftpflichtversicherung",
+      "Rentenversicherung", "Beitrag", "Beleg", "Quittung", "Rabatt",
+      "Sonderangebot", "Reklamation", "Umtausch", "Garantie", "Lieferung",
+      "Versand", "Lieferzeit", "Bestellung", "Rechnungsadresse", "Kontoangabe",
+
+      // Wohnen & Alltagsorganisation
+      "Mietvertrag", "Vermieter", "Vermieterin", "Mieter", "Mieterin",
+      "Nebenkosten", "Kaution", "Nachbar", "Nachbarin", "Hausordnung",
+      "Heizung", "Warmwasser", "Nebenkostenabrechnung", "Hausverwaltung",
+      "Hausmeisterdienst", "Mülltonne", "Biomüll", "Restmüll", "Gelber Sack",
+      "Sperrmüll", "Putzplan", "Staubsauger", "Waschmaschine", "Trockner",
+      "Stromrechnung", "Gasrechnung", "Internetanschluss", "Router",
+      "Vertragspartner", "Handwerker", "Renovierung", "Reparatur",
+      "Vorauszahlung", "Wohnungsbesichtigung", "Immobilienanzeige",
+
+      // Stadt & Infrastruktur
+      "Verkehrsmittel", "Stadtplan", "Orientierung", "Innenstadt",
+      "Fußgängerzone", "Einbahnstraße", "Baustelle", "Umleitung",
+      "Fahrkarte", "Monatskarte", "Fahrplan", "Verspätung", "Haltestelle",
+      "Sitzplatz", "Stehplatz", "Reservierung", "Taxiunternehmen",
+      "Fahrgast", "Schaffner", "Kontrolleur", "Bahngleis", "Warteschlange",
+      "Parkplatz", "Parkhaus", "Parkuhr", "Parkgebühr", "Stau", "Blitzer",
+      "Geschwindigkeitsbegrenzung", "Fahrverbot", "Führerschein", "Kennzeichen",
+      "Verkehrsregel", "Unfallbericht", "Polizeiwache",
+
+      // Gesundheit & Körper (erweitert, erwachsen)
+      "Symptom", "Behandlung", "Therapie", "Operation", "Krankenhausaufenthalt",
+      "Sprechstunde", "Terminbestätigung", "Krankschreibung", "Rezept",
+      "Apotheke", "Tablette", "Tropfen", "Spritze", "Nebenwirkung",
+      "Notaufnahme", "Rettungswagen", "Erste Hilfe", "Untersuchung",
+      "Blutdruck", "Blutprobe", "Röntgenbild", "Impfpass", "Schmerzmittel",
+      "Physiotherapie", "Psychotherapie", "Ernährungsberatung",
+      "Fitnessstudio", "Mitgliedschaft", "Trainingsplan", "Ausdauer",
+      "Muskulatur", "Kondition", "Erholung", "Entspannung", "Stressbewältigung",
+
+      // Ernährung & Konsum (erwachsen)
+      "Vollkornprodukt", "Nährstoff", "Protein", "Kohlenhydrat",
+      "Fettgehalt", "Kalorie", "Vitamin", "Mineralstoff", "Zutat",
+      "Konservierungsstoff", "Allergie", "Unverträglichkeit", "Laktose",
+      "Gluten", "Vegetarier", "Vegetarierin", "Veganer", "Veganerin",
+      "Ernährungsstil", "Diät", "Lebensmittelgeschäft", "Supermarktkette",
+      "Wochenmarkt", "Bestellservice", "Lieferservice", "Trinkgeld",
+      "Restaurantbesuch", "Speisekarte", "Vorspeise", "Hauptgericht",
+      "Nachspeise", "Beilage", "Getränkekarte", "Rechnungssumme",
+
+      // Familie & Beziehungen (erwachsen)
+      "Partnerschaft", "Beziehung", "Ehe", "Hochzeit", "Scheidung",
+      "Schwangerschaft", "Geburt", "Erziehung", "Elternzeit", "Verwandter",
+      "Verwandte", "Verlobung", "Streit", "Versöhnung", "Vertrauen",
+      "Verantwortung", "Rolle", "Erwartung", "Konflikt", "Kompliment",
+      "Kritik", "Meinungsverschiedenheit", "Unterstützung", "Rücksicht",
+      "Respekt", "Freundeskreis", "Bekanntschaft", "Nachbarschaftsfest",
+
+      // Freizeit, Medien & Kultur
+      "Freizeitangebot", "Hobby", "Sportverein", "Mitglied", "Mitgliedsbeitrag",
+      "Veranstaltung", "Konzert", "Ausstellung", "Theaterstück", "Oper",
+      "Festival", "Open-Air-Konzert", "Kinoabend", "Lesung", "Vortrag",
+      "Workshop", "Kreativität", "Malerei", "Fotografie", "Literatur",
+      "Roman", "Krimi", "Sachbuch", "Biografie", "Zeitschrift", "Artikel",
+      "Kommentar", "Reportage", "Dokumentation", "Nachrichtensendung",
+      "Talkshow", "Serienfolge", "Staffel", "Streamingdienst", "Abonnement",
+      "Nutzerkonto", "Einstellung", "Profilbild", "Datenschutz",
+      "Privatsphäre", "Sendezeit", "Zitat",
+
+      // Reisen & Tourismus (erwachsen)
+      "Reisebüro", "Reiseveranstalter", "Fluggesellschaft", "Buchungsbestätigung",
+      "Reiseroute", "Reiseunterlagen", "Reiseversicherung", "Handgepäck",
+      "Gepäckstück", "Koffer", "Rucksackreise", "Städtetrip", "Pauschalreise",
+      "Individualreise", "Unterkunft", "Ferienwohnung", "Pension", "Hostel",
+      "Jugendherberge", "Zeltplatz", "Campingplatz", "Wohnmobil",
+      "Buchungsportal", "Bewertung", "Erfahrungsbericht", "Sightseeing",
+      "Stadtführung", "Reiseführer", "Souvenir", "Postkarte",
+      "Touristeninformation", "Reisewarnung", "Zeitzone", "Zeitverschiebung",
+
+      // Umwelt & Natur (B1–B2)
+      "Umwelt", "Klimawandel", "Klimaschutz", "Treibhausgas", "Emission",
+      "Luftverschmutzung", "Feinstaub", "Waldbrand", "Überflutung", "Dürre",
+      "Umweltschutzorganisation", "Naturschutzgebiet", "Nationalpark",
+      "Solarenergie", "Windkraft", "Wasserkraft", "Mülltrennung",
+      "Recycling", "Rohstoff", "Ressource", "Plastik", "Verpackung",
+      "Ökosystem", "Artenvielfalt", "Lebensraum", "Tierschutz",
+      "Umweltbewusstsein", "Energiewende", "Stromverbrauch",
+      "Energiesparlampe", "Ladestation", "Elektroauto",
+
+      // Technik & Digitales
+      "Smartphone", "Laptop", "Tablet", "Bildschirm", "Tastatur",
+      "Kopfhörer", "Lautsprecher", "Ladekabel", "Akkulaufzeit", "Dateiformat",
+      "Cloudspeicher", "Sicherheitskopie", "Benutzerkonto", "Passwort",
+      "Sicherheitscode", "Software", "Hardware", "Betriebssystem",
+      "Anwendung", "App", "Update", "Fehlermeldung", "Netzwerk",
+      "WLAN", "Verbindung", "Bandbreite", "Upload", "Download",
+      "Dateianhang", "E-Mail-Adresse", "Spamfilter", "Benachrichtigung",
+      "Algorithmus", "Suchmaschine", "Suchbegriff", "Trefferliste",
+      "Soziales Netzwerk", "Follower", "Influencer", "Kommentarbereich",
+      "Bewertungssystem",
+
+      // Arbeit 2: Bürokommunikation & Organisation
+      "Anhang", "Betreff", "Verteiler", "Protokoll", "Tagesordnung",
+      "Rückmeldung", "Rückfrage", "Rücksprache", "Absprache", "Zuständigkeit",
+      "Vertretung", "Urlaubsantrag", "Genehmigung", "Projektplan",
+      "Priorität", "Zwischenstand", "Meilenstein", "Arbeitsgruppe",
+      "Teamarbeit", "Einzelarbeit", "Konfliktlösung", "Motivation",
+      "Leistung", "Feedback", "Fortschritt", "Verbesserungsvorschlag",
+
+      // Recht & Verwaltung
+      "Gericht", "Anwalt", "Anwältin", "Klage", "Urteil", "Strafe",
+      "Bußgeld", "Verstoß", "Zeuge", "Zeugin", "Polizeibericht",
+      "Anzeige", "Diebstahl", "Einbruch", "Beschwerde", "Fristverlängerung",
+      "Widerspruch", "Einspruch", "Versicherungsfall", "Schadenmeldung",
+      "Bedingung", "Klausel", "Datenschutzerklärung", "Nutzungsbedingung",
+      "Zustimmung", "Widerruf", "Vertragspartner", "Rechtsberatung",
+
+      // Gefühle, Charakter & Kommunikation
+      "Gefühl", "Stimmung", "Laune", "Enttäuschung", "Begeisterung",
+      "Überraschung", "Erleichterung", "Besorgnis", "Verzweiflung",
+      "Zweifel", "Zufriedenheit", "Dankbarkeit", "Vertrauen",
+      "Verständnis", "Missverständnis", "Ehrlichkeit", "Geduld",
+      "Höflichkeit", "Rücksichtnahme", "Einfühlungsvermögen", "Mut",
+      "Humor", "Ironie", "Missbrauch", "Gerücht", "Aussage", "Argument",
+      "Begründung", "Diskussion", "Debatte", "Standpunkt", "Meinung",
+      "Überzeugung", "Kompromiss", "Vereinbarung",
+
+      // Zeit, Planung & Organisation
+      "Zukunftsplanung", "Tagesablauf", "Wochenplanung", "Frist",
+      "Erinnerung", "Aufgabe", "To-do-Liste", "Notiz", "Kalendereintrag",
+      "Erledigung", "Verschiebung", "Absage", "Bestätigung", "Zeitdruck",
+      "Zeitmanagement", "Pünktlichkeit", "Verspätung", "Prokrastination",
+      "Vorbereitung", "Nachbereitung",
+
+      // Kultur, Identität & Werte
+      "Tradition", "Gewohnheit", "Ritual", "Vorurteil", "Klischee",
+      "Toleranz", "Respekt", "Konfliktkultur", "Weltanschauung",
+      "Religion", "Glaubensrichtung", "Sprachvariante", "Dialekt",
+      "Muttersprache", "Fremdsprache", "Kulturunterschied", "Missverständnis",
+      "Lebensstil", "Lebensqualität", "Wertvorstellung", "Gleichberechtigung",
+      "Diskriminierung", "Chancengleichheit", "Integration", "Inklusion",
+
+      // Sonstige B1–B2-Alltagsbegriffe
+      "Haushaltsgerät", "Panne", "Komfort", "Zufall", "Einfluss",
+      "Auswirkung", "Folge", "Voraussetzung", "Hintergrund", "Zusammenhang",
+      "Zusatz", "Überblick", "Auswahl", "Alternative", "Möglichkeit",
+      "Beispiel", "Gegenteil", "Vergleich", "Unterschied", "Ähnlichkeit",
+      "Entwicklung", "Verlauf", "Trend", "Anstieg", "Rückgang", "Zunahme",
+      "Abnahme", "Steigerung", "Verringerung", "Umfrage", "Ergebnis",
+      "Bewertung", "Kriterium", "Bedingung", "Vorteil", "Nachteil",
+      "Lösungsvorschlag", "Herausforderung", "Schwierigkeit", "Fehler",
+      "Missverständnis", "Erfolg", "Misserfolg", "Erfahrung", "Eindruck"
+    ];
+
+    // ------------ Spiel-Logik (für beide Modi) ------------
 
     const wordBox = document.getElementById("wordBox");
     const nextBtn = document.getElementById("nextBtn");
@@ -318,8 +550,13 @@
     const infoEl = document.getElementById("info");
     const reshuffleOnEnd = document.getElementById("reshuffleOnEnd");
     const hideCounter = document.getElementById("hideCounter");
+    const modeSelect = document.getElementById("modeSelect");
 
-    // Fisher-Yates Shuffle
+    let currentList = [...childWords];
+    let shuffledWords = [];
+    let index = 0;
+    let shown = 0;
+
     function shuffle(a) {
       for (let i = a.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -327,32 +564,47 @@
       }
     }
 
-    shuffle(words);
-
-    let index = 0;
-    let shown = 0;
+    function setMode(mode) {
+      if (mode === "adult") {
+        currentList = [...adultWords];
+      } else {
+        currentList = [...childWords];
+      }
+      shuffledWords = [...currentList];
+      shuffle(shuffledWords);
+      index = 0;
+      shown = 0;
+      wordBox.innerHTML =
+        '<span class="placeholder">Auf „Nächstes Wort“ klicken</span>';
+      updateCounter();
+    }
 
     function updateCounter() {
       if (hideCounter.checked) {
         infoEl.style.visibility = "hidden";
-      } else {
-        infoEl.style.visibility = "visible";
-        counterEl.textContent = `${shown} / ${words.length}`;
+        return;
       }
+      infoEl.style.visibility = "visible";
+      const mode = modeSelect.value === "adult" ? "Erwachsene" : "Kinder";
+      counterEl.textContent = `${shown} / ${currentList.length}`;
+      infoEl.innerHTML =
+        `<span class="counter">${shown} / ${currentList.length}</span>` +
+        `&nbsp;Wörter gezeigt (${mode})`;
     }
 
     function showNextWord() {
-      if (words.length === 0) return;
+      if (!currentList.length) return;
 
-      if (index >= words.length) {
+      if (index >= shuffledWords.length) {
         if (reshuffleOnEnd.checked) {
-          shuffle(words);
+          shuffledWords = [...currentList];
+          shuffle(shuffledWords);
         }
         index = 0;
         shown = 0;
       }
 
-      const word = words[index];
+      const word = shuffledWords[index];
       index++;
       shown++;
 
@@ -364,10 +616,11 @@
     nextBtn.addEventListener("click", showNextWord);
     reshuffleOnEnd.addEventListener("change", updateCounter);
     hideCounter.addEventListener("change", updateCounter);
+    modeSelect.addEventListener("change", () => setMode(modeSelect.value));
 
-    // Initial counter state
-    shown = 0;
-    updateCounter();
+    // Initialzustand: Kinder-Modus
+    setMode("kids");
   </script>
 </body>
+
 </html>
