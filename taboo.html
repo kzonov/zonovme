@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8" />
-  <title>Tabu / Guess It – Deutsch (Kinder & Erwachsene)</title>
+  <title>Tabu / Guess It – Deutsch (mit Artikeln & Übersetzung)</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     :root {
@@ -89,7 +89,7 @@
     }
 
     .word-box {
-      margin: 12px auto 16px;
+      margin: 12px auto 6px;
       padding: 20px 16px;
       border-radius: 12px;
       border: 2px dashed #d1d5db;
@@ -118,8 +118,32 @@
       letter-spacing: 0.02em;
     }
 
+    .translation {
+      margin-top: 6px;
+      font-size: 0.95rem;
+      color: #4b5563;
+      min-height: 1.2em;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .translation {
+        color: #e5e7eb;
+      }
+    }
+
+    .translation strong {
+      font-weight: 700;
+    }
+
+    .buttons-row {
+      margin-top: 8px;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
     button {
-      margin-top: 4px;
       padding: 10px 18px;
       font-size: 1rem;
       font-weight: 600;
@@ -130,6 +154,12 @@
       cursor: pointer;
       transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.2s ease;
       box-shadow: 0 8px 18px rgba(37, 99, 235, 0.35);
+      white-space: nowrap;
+    }
+
+    button.secondary {
+      background: #6b7280;
+      box-shadow: 0 8px 18px rgba(55, 65, 81, 0.35);
     }
 
     button:hover {
@@ -138,9 +168,21 @@
       box-shadow: 0 10px 24px rgba(37, 99, 235, 0.5);
     }
 
+    button.secondary:hover {
+      background: #4b5563;
+      box-shadow: 0 10px 24px rgba(55, 65, 81, 0.5);
+    }
+
     button:active {
       transform: translateY(0);
       box-shadow: 0 4px 10px rgba(37, 99, 235, 0.4);
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: default;
+      transform: none;
+      box-shadow: none;
     }
 
     .info {
@@ -196,7 +238,7 @@
   <div class="card">
     <h1>Tabu / Guess It – Deutsch</h1>
     <div class="subtitle">
-      Eine Person sieht das Wort und beschreibt es, die anderen raten.
+      Eine Person sieht das Wort und beschreibt es, die anderen raten – mit Artikel & Übersetzung.
     </div>
 
     <div class="top-row">
@@ -211,7 +253,12 @@
       <span class="placeholder">Modus wählen und auf „Nächstes Wort“ klicken</span>
     </div>
 
-    <button id="nextBtn">Nächstes Wort</button>
+    <div id="translation" class="translation"></div>
+
+    <div class="buttons-row">
+      <button id="nextBtn">Nächstes Wort</button>
+      <button id="translateBtn" class="secondary">Übersetzen</button>
+    </div>
 
     <div class="controls">
       <label>
@@ -231,322 +278,418 @@
   </div>
 
   <script>
-    // ---------------- Kinder-Version (wie vorher) ----------------
+    // ---------------- Kinder-Version (mit Artikeln) ----------------
     const childWords = [
       // Schule & Familie
-      "Kind", "Mutter", "Vater", "Eltern", "Familie", "Bruder", "Schwester",
-      "Oma", "Opa", "Freund", "Freundin", "Lehrer", "Lehrerin", "Schüler",
-      "Schülerin", "Klasse", "Schule", "Hausmeister", "Direktor", "Direktorin",
-      "Heft", "Buch", "Stift", "Bleistift", "Kugelschreiber", "Radiergummi",
-      "Lineal", "Rucksack", "Federmappe", "Tafel", "Kreide", "Computer",
-      "Laptop", "Tablet", "Bildschirm", "Tisch", "Stuhl", "Bank", "Fenster",
-      "Tür",
+      "das Kind", "die Mutter", "der Vater", "die Eltern", "die Familie",
+      "der Bruder", "die Schwester", "die Oma", "der Opa", "der Freund",
+      "die Freundin", "der Lehrer", "die Lehrerin", "der Schüler",
+      "die Schülerin", "die Klasse", "die Schule", "der Hausmeister",
+      "der Direktor", "die Direktorin", "das Heft", "das Buch", "der Stift",
+      "der Bleistift", "der Kugelschreiber", "der Radiergummi", "das Lineal",
+      "der Rucksack", "die Federmappe", "die Tafel", "die Kreide",
+      "der Computer", "der Laptop", "das Tablet", "der Bildschirm",
+      "der Tisch", "der Stuhl", "die Bank", "das Fenster", "die Tür",
 
       // Zuhause
-      "Haus", "Wohnung", "Zimmer", "Küche", "Bad", "Bett", "Schrank",
-      "Lampe", "Teppich", "Boden", "Decke", "Wand", "Treppenhaus", "Garten",
-      "Balkon", "Garage", "Keller", "Flur", "Türklinke", "Schlüssel",
+      "das Haus", "die Wohnung", "das Zimmer", "die Küche", "das Bad",
+      "das Bett", "der Schrank", "die Lampe", "der Teppich", "der Boden",
+      "die Decke", "die Wand", "das Treppenhaus", "der Garten", "der Balkon",
+      "die Garage", "der Keller", "der Flur", "die Türklinke", "der Schlüssel",
 
       // Stadt & Orte
-      "Stadt", "Dorf", "Straße", "Platz", "Park", "Spielplatz", "Brücke",
-      "Kirche", "Rathaus", "Supermarkt", "Laden", "Bäcker", "Metzger",
-      "Apotheke", "Post", "Bahnhof", "Haltestelle", "Bushaltestelle",
-      "Flughafen", "Bibliothek",
+      "die Stadt", "das Dorf", "die Straße", "der Platz", "der Park",
+      "der Spielplatz", "die Brücke", "die Kirche", "das Rathaus",
+      "der Supermarkt", "der Laden", "der Bäcker", "der Metzger",
+      "die Apotheke", "die Post", "der Bahnhof", "die Haltestelle",
+      "die Bushaltestelle", "der Flughafen", "die Bibliothek",
 
       // Verkehr
-      "Auto", "Bus", "Zug", "Fahrrad", "Roller", "U-Bahn", "Straßenbahn",
-      "Schiff", "Boot", "Flugzeug", "Taxi", "Motor", "Lenkrad", "Reifen",
-      "Bremse", "Ampel", "Zebrastreifen", "Fahrer", "Beifahrer", "Fahrkarte",
+      "das Auto", "der Bus", "der Zug", "das Fahrrad", "der Roller",
+      "die U-Bahn", "die Straßenbahn", "das Schiff", "das Boot",
+      "das Flugzeug", "das Taxi", "der Motor", "das Lenkrad", "der Reifen",
+      "die Bremse", "die Ampel", "der Zebrastreifen", "der Fahrer",
+      "der Beifahrer", "die Fahrkarte",
 
       // Zeit & Jahreszeiten
-      "Tag", "Nacht", "Morgen", "Abend", "Mittag", "Woche", "Monat", "Jahr",
-      "Ferien", "Urlaub", "Stunde", "Minute", "Sekunde", "Frühling",
-      "Sommer", "Herbst", "Winter", "Montag", "Dienstag", "Mittwoch",
-      "Donnerstag", "Freitag", "Samstag", "Sonntag", "Uhr", "Kalender",
-      "Datum", "Geburtstag", "Feier", "Fest", "Weihnachten", "Ostern",
-      "Silvester", "Pause", "Stundenplan", "Wecker", "Glocke",
+      "der Tag", "die Nacht", "der Morgen", "der Abend", "der Mittag",
+      "die Woche", "der Monat", "das Jahr", "die Ferien", "der Urlaub",
+      "die Stunde", "die Minute", "die Sekunde", "der Frühling", "der Sommer",
+      "der Herbst", "der Winter", "der Montag", "der Dienstag", "der Mittwoch",
+      "der Donnerstag", "der Freitag", "der Samstag", "der Sonntag",
+      "die Uhr", "der Kalender", "das Datum", "der Geburtstag", "die Feier",
+      "das Fest", "das Weihnachten", "das Ostern", "das Silvester",
+      "die Pause", "der Stundenplan", "der Wecker", "die Glocke",
 
       // Tiere
-      "Hund", "Katze", "Maus", "Vogel", "Pferd", "Kuh", "Schaf", "Schwein",
-      "Huhn", "Hase", "Kaninchen", "Ente", "Gans", "Fisch", "Bär", "Löwe",
-      "Tiger", "Affe", "Elefant", "Giraffe", "Zebra", "Krokodil", "Frosch",
-      "Igel", "Fuchs", "Wolf", "Biene", "Wespe", "Schmetterling", "Käfer",
-      "Ameise", "Spinne", "Eule", "Rabe", "Pinguin", "Delfin", "Wal",
-      "Robbe", "Koala", "Panda", "Zoo",
+      "der Hund", "die Katze", "die Maus", "der Vogel", "das Pferd",
+      "die Kuh", "das Schaf", "das Schwein", "das Huhn", "der Hase",
+      "das Kaninchen", "die Ente", "die Gans", "der Fisch", "der Bär",
+      "der Löwe", "der Tiger", "der Affe", "der Elefant", "die Giraffe",
+      "das Zebra", "das Krokodil", "der Frosch", "der Igel", "der Fuchs",
+      "der Wolf", "die Biene", "die Wespe", "der Schmetterling", "der Käfer",
+      "die Ameise", "die Spinne", "die Eule", "der Rabe", "der Pinguin",
+      "der Delfin", "der Wal", "die Robbe", "der Koala", "der Panda",
+      "der Zoo",
 
       // Essen & Trinken
-      "Apfel", "Birne", "Banane", "Orange", "Mandarine", "Traube", "Kirsche",
-      "Pfirsich", "Pflaume", "Erdbeere", "Himbeere", "Brombeere", "Melone",
-      "Ananas", "Zitrone", "Tomate", "Gurke", "Karotte", "Kartoffel",
-      "Zwiebel", "Salat", "Brokkoli", "Paprika", "Pilz", "Brot", "Brötchen",
-      "Käse", "Wurst", "Schinken", "Ei", "Butter", "Marmelade", "Honig",
-      "Zucker", "Salz", "Pfeffer", "Nudeln", "Reis", "Pizza", "Suppe",
-      "Kuchen", "Torte", "Keks", "Schokolade", "Bonbon", "Eis", "Milch",
-      "Wasser", "Saft", "Tee", "Kakao", "Limo", "Frühstück", "Mittagessen",
-      "Abendessen", "Teller", "Glas", "Messer", "Gabel", "Löffel",
+      "der Apfel", "die Birne", "die Banane", "die Orange", "die Mandarine",
+      "die Traube", "die Kirsche", "der Pfirsich", "die Pflaume",
+      "die Erdbeere", "die Himbeere", "die Brombeere", "die Melone",
+      "die Ananas", "die Zitrone", "die Tomate", "die Gurke", "die Karotte",
+      "die Kartoffel", "die Zwiebel", "der Salat", "der Brokkoli",
+      "die Paprika", "der Pilz", "das Brot", "das Brötchen", "der Käse",
+      "die Wurst", "der Schinken", "das Ei", "die Butter", "die Marmelade",
+      "der Honig", "der Zucker", "das Salz", "der Pfeffer", "die Nudeln",
+      "der Reis", "die Pizza", "die Suppe", "der Kuchen", "die Torte",
+      "der Keks", "die Schokolade", "das Bonbon", "das Eis", "die Milch",
+      "das Wasser", "der Saft", "der Tee", "der Kakao", "die Limo",
+      "das Frühstück", "das Mittagessen", "das Abendessen", "der Teller",
+      "das Glas", "das Messer", "die Gabel", "der Löffel",
 
       // Spielzeug & Spiele
-      "Ball", "Puppe", "Teddy", "Puzzle", "Spiel", "Würfel", "Karte",
-      "Baustein", "Lego", "Seil", "Schaukel", "Rutsche", "Sandkasten",
-      "Kreisel", "Brettspiel", "Videospiel", "Comicheft", "Figur", "Fernglas",
-      "Spielzeug",
+      "der Ball", "die Puppe", "der Teddy", "das Puzzle", "das Spiel",
+      "der Würfel", "die Karte", "der Baustein", "das Lego", "das Seil",
+      "die Schaukel", "die Rutsche", "der Sandkasten", "der Kreisel",
+      "das Brettspiel", "das Videospiel", "das Comicheft", "die Figur",
+      "das Fernglas", "das Spielzeug",
 
       // Sport & Bewegung
-      "Fußball", "Handball", "Basketball", "Tennis", "Volleyball",
-      "Tischtennis", "Schwimmen", "Laufen", "Sprung", "Torwart",
-      "Mannschaft", "Trainer", "Trikot", "Sportschuh", "Turnschuh", "Helm",
-      "Fahrradhelm", "Skateboard", "Ski", "Snowboard",
+      "der Fußball", "der Handball", "der Basketball", "das Tennis",
+      "der Volleyball", "das Tischtennis", "das Schwimmen", "das Laufen",
+      "der Sprung", "der Torwart", "die Mannschaft", "der Trainer",
+      "das Trikot", "der Sportschuh", "der Turnschuh", "der Helm",
+      "der Fahrradhelm", "das Skateboard", "der Ski", "das Snowboard",
 
       // Natur & Wetter
-      "Blume", "Baum", "Busch", "Gras", "Wiese", "Wald", "Blatt", "Ast",
-      "Zweig", "Stamm", "Wurzel", "Teich", "See", "Fluss", "Bach", "Meer",
-      "Ozean", "Strand", "Insel", "Berg", "Hügel", "Tal", "Himmel", "Wolke",
-      "Regen", "Schnee", "Wind", "Sturm", "Gewitter", "Blitz", "Donner",
-      "Sonne", "Schatten", "Nebel", "Regenbogen", "Stern", "Mond", "Planet",
-      "Erde",
+      "die Blume", "der Baum", "der Busch", "das Gras", "die Wiese",
+      "der Wald", "das Blatt", "der Ast", "der Zweig", "der Stamm",
+      "die Wurzel", "der Teich", "der See", "der Fluss", "der Bach",
+      "das Meer", "der Ozean", "der Strand", "die Insel", "der Berg",
+      "der Hügel", "das Tal", "der Himmel", "die Wolke", "der Regen",
+      "der Schnee", "der Wind", "der Sturm", "das Gewitter", "der Blitz",
+      "der Donner", "die Sonne", "der Schatten", "der Nebel",
+      "der Regenbogen", "der Stern", "der Mond", "der Planet", "die Erde",
 
       // Körper & Kleidung
-      "Kopf", "Hand", "Arm", "Bein", "Fuß", "Finger", "Daumen", "Auge",
-      "Ohr", "Nase", "Mund", "Zahn", "Herz", "Bauch", "Rücken", "Schulter",
-      "Knie", "Ellbogen", "Haut", "Körper",
-      "Hemd", "Hose", "Rock", "Kleid", "Jacke", "Mantel", "Pullover",
-      "T-Shirt", "Bluse", "Schuh", "Stiefel", "Socke", "Mütze", "Hut",
-      "Schal", "Handschuh", "Brille", "Gürtel", "Regenschirm", "Anzug",
+      "der Kopf", "die Hand", "der Arm", "das Bein", "der Fuß",
+      "der Finger", "der Daumen", "das Auge", "das Ohr", "die Nase",
+      "der Mund", "der Zahn", "das Herz", "der Bauch", "der Rücken",
+      "die Schulter", "das Knie", "der Ellbogen", "die Haut", "der Körper",
+      "das Hemd", "die Hose", "der Rock", "das Kleid", "die Jacke",
+      "der Mantel", "der Pullover", "das T-Shirt", "die Bluse", "der Schuh",
+      "der Stiefel", "die Socke", "die Mütze", "der Hut", "der Schal",
+      "der Handschuh", "die Brille", "der Gürtel", "der Regenschirm",
+      "der Anzug",
 
       // Medien & Kunst
-      "Musik", "Lied", "Stimme", "Gitarre", "Klavier", "Trommel", "Flöte",
-      "Geige", "Radio", "Fernseher", "Film", "Foto", "Kamera", "Bild",
-      "Zeichnung", "Malerei", "Farbe", "Pinsel", "Zettel",
+      "die Musik", "das Lied", "die Stimme", "die Gitarre", "das Klavier",
+      "die Trommel", "die Flöte", "die Geige", "das Radio", "der Fernseher",
+      "der Film", "das Foto", "die Kamera", "das Bild", "die Zeichnung",
+      "die Malerei", "die Farbe", "der Pinsel", "der Zettel",
 
       // Sprache & Geschichten
-      "Zeitung", "Zeitschrift", "Seite", "Wörterbuch", "Sprache", "Wort",
-      "Satz", "Buchstabe", "Geschichte", "Märchen", "Held", "Prinzessin",
-      "Drache", "Zauberer", "Hexe", "Feuer", "Luft", "Element", "Stein",
+      "die Zeitung", "die Zeitschrift", "die Seite", "das Wörterbuch",
+      "die Sprache", "das Wort", "der Satz", "der Buchstabe",
+      "die Geschichte", "das Märchen", "der Held", "die Prinzessin",
+      "der Drache", "der Zauberer", "die Hexe", "das Feuer", "die Luft",
+      "das Element", "der Stein",
 
       // Geld & Dinge
-      "Gold", "Silber", "Geld", "Münze", "Schein", "Portemonnaie",
-      "Taschengeld", "Preis", "Markt", "Geschenk", "Paket", "Brief",
-      "Stempel", "Fotoalbum", "Handy", "Telefon", "Nummer", "Adresse",
+      "das Gold", "das Silber", "das Geld", "die Münze", "der Schein",
+      "das Portemonnaie", "das Taschengeld", "der Preis", "der Markt",
+      "das Geschenk", "das Paket", "der Brief", "der Stempel",
+      "das Fotoalbum", "das Handy", "das Telefon", "die Nummer",
+      "die Adresse",
 
       // Gesundheit & Sicherheit
-      "Arzt", "Ärztin", "Krankenhaus", "Praxis", "Medizin", "Tablette",
-      "Pflaster", "Verband", "Fieber", "Husten", "Schnupfen", "Impfung",
-      "Unfall", "Polizei", "Feuerwehr", "Feuerwehrmann", "Feuerwehrfrau",
-      "Gefahr", "Warnschild", "Notruf",
+      "der Arzt", "die Ärztin", "das Krankenhaus", "die Praxis",
+      "die Medizin", "die Tablette", "das Pflaster", "der Verband",
+      "das Fieber", "der Husten", "der Schnupfen", "die Impfung",
+      "der Unfall", "die Polizei", "die Feuerwehr", "der Feuerwehrmann",
+      "die Feuerwehrfrau", "die Gefahr", "das Warnschild", "der Notruf",
 
       // Computer & Internet
-      "Computermaus", "Tastatur", "Programm", "Spieler", "Punkt", "Level",
-      "Internet", "Webseite", "Passwort", "Benutzer", "E-Mail", "Nachricht",
-      "Chat", "Ordner", "Drucker", "Scanner", "Datei", "Papierkorb",
-      "Symbol", "Bildschirmfoto",
+      "die Computermaus", "die Tastatur", "das Programm", "der Spieler",
+      "der Punkt", "das Level", "das Internet", "die Webseite",
+      "das Passwort", "der Benutzer", "die E-Mail", "die Nachricht",
+      "der Chat", "der Ordner", "der Drucker", "der Scanner", "die Datei",
+      "der Papierkorb", "das Symbol", "das Bildschirmfoto",
 
       // Weitere Orte & Alltag
-      "Museum", "Kino", "Theater", "Restaurant", "Café", "Schwimmbad",
-      "Turnhalle", "Marktplatz", "Spielzeugladen", "Blumenladen", "Frisör",
-      "Büro", "Werkstatt", "Baustelle", "Farm", "Bauernhof", "Kindergarten",
-      "Krippe", "Klassenraum", "Schulhof", "Mensa", "Treppe", "Aufzug",
-      "Rolltreppe", "Spiegel", "Seife", "Handtuch", "Zahnbürste",
-      "Zahnpasta", "Kamm", "Bürste", "Kleber", "Schere", "Notizbuch",
-      "Kalenderblatt"
+      "das Museum", "das Kino", "das Theater", "das Restaurant", "das Café",
+      "das Schwimmbad", "die Turnhalle", "der Marktplatz",
+      "der Spielzeugladen", "der Blumenladen", "der Frisör", "das Büro",
+      "die Werkstatt", "die Baustelle", "die Farm", "der Bauernhof",
+      "der Kindergarten", "die Krippe", "der Klassenraum", "der Schulhof",
+      "die Mensa", "die Treppe", "der Aufzug", "die Rolltreppe",
+      "der Spiegel", "die Seife", "das Handtuch", "die Zahnbürste",
+      "die Zahnpasta", "der Kamm", "die Bürste", "der Kleber", "die Schere",
+      "das Notizbuch", "das Kalenderblatt"
     ];
 
-    // ---------------- Erwachsenen-Version (B1–B2, ~1000 Nomen) ----------------
-    // Thematisch breit: Arbeit, Studium, Politik, Gesellschaft, Technik, Kultur, Umwelt, usw.
-
+    // ---------------- Erwachsenen-Version (B1–B2, mit Artikeln) ----------------
     const adultWords = [
       // Arbeit & Beruf
-      "Arbeitsplatz", "Kollege", "Kollegin", "Abteilung", "Bewerbung",
-      "Vorstellungsgespräch", "Lebenslauf", "Stellenanzeige", "Berufserfahrung",
-      "Fortbildung", "Kündigung", "Vertrag", "Vollzeit", "Teilzeit", "Schichtdienst",
-      "Gehalt", "Lohn", "Steuer", "Büro", "Besprechung", "Konferenz", "Meeting",
-      "Projekt", "Frist", "Termin", "Chef", "Chefin", "Leitung", "Praktikum",
-      "Werkstudent", "Werkstudentin", "Gewerkschaft", "Betrieb", "Industrie",
-      "Handwerk", "Dienstleistung", "Arbeitsmarkt", "Büromaterial", "Kopierer",
-      "Druckerpatrone", "Visitenkarte", "Kundendienst", "Kunde", "Kundin",
-      "Verkauf", "Verkäufer", "Verkäuferin", "Service", "Verhandlung",
-      "Rechnung", "Mahnung", "Überweisung", "Kontoauszug",
+      "der Arbeitsplatz", "der Kollege", "die Kollegin", "die Abteilung",
+      "die Bewerbung", "das Vorstellungsgespräch", "der Lebenslauf",
+      "die Stellenanzeige", "die Berufserfahrung", "die Fortbildung",
+      "die Kündigung", "der Vertrag", "die Vollzeit", "die Teilzeit",
+      "der Schichtdienst", "das Gehalt", "der Lohn", "die Steuer",
+      "das Büro", "die Besprechung", "die Konferenz", "das Meeting",
+      "das Projekt", "die Frist", "der Termin", "der Chef", "die Chefin",
+      "die Leitung", "das Praktikum", "der Werkstudent", "die Werkstudentin",
+      "die Gewerkschaft", "der Betrieb", "die Industrie", "das Handwerk",
+      "die Dienstleistung", "der Arbeitsmarkt", "das Büromaterial",
+      "der Kopierer", "die Druckerpatrone", "die Visitenkarte",
+      "der Kundendienst", "der Kunde", "die Kundin", "der Verkauf",
+      "der Verkäufer", "die Verkäuferin", "der Service", "die Verhandlung",
+      "die Rechnung", "die Mahnung", "die Überweisung", "der Kontoauszug",
 
       // Ausbildung & Studium
-      "Ausbildung", "Auszubildender", "Auszubildende", "Prüfung", "Klausur",
-      "Zeugnis", "Note", "Fach", "Semester", "Vorlesung", "Seminar",
-      "Dozent", "Dozentin", "Professor", "Professorin", "Studium", "Studierende",
-      "Hochschule", "Universität", "Bibliothek", "Fachbereich", "Stipendium",
-      "Studiengebühr", "Hausarbeit", "Abschlussarbeit", "Bachelor", "Master",
-      "Doktorarbeit", "Forschungsprojekt", "Labor", "Experiment", "Ergebnis",
-      "Hypothese", "Methode", "Theorie", "Praxis", "Lernstrategie",
-      "Sprachkurs", "Sprachniveau", "Grammatik", "Wortschatz", "Aussprache",
+      "die Ausbildung", "der Auszubildende", "die Auszubildende",
+      "die Prüfung", "die Klausur", "das Zeugnis", "die Note", "das Fach",
+      "das Semester", "die Vorlesung", "das Seminar", "der Dozent",
+      "die Dozentin", "der Professor", "die Professorin", "das Studium",
+      "der Studierende", "die Hochschule", "die Universität",
+      "die Bibliothek", "der Fachbereich", "das Stipendium",
+      "die Studiengebühr", "die Hausarbeit", "die Abschlussarbeit",
+      "der Bachelor", "der Master", "die Doktorarbeit",
+      "das Forschungsprojekt", "das Labor", "das Experiment",
+      "das Ergebnis", "die Hypothese", "die Methode", "die Theorie",
+      "die Praxis", "die Lernstrategie", "der Sprachkurs",
+      "das Sprachniveau", "die Grammatik", "der Wortschatz",
+      "die Aussprache",
 
       // Politik & Gesellschaft
-      "Regierung", "Parlament", "Minister", "Ministerin", "Bundeskanzler",
-      "Bundeskanzlerin", "Bundespräsident", "Bundespräsidentin", "Wahl",
-      "Stimme", "Abstimmung", "Mehrheit", "Minderheit", "Partei", "Opposition",
-      "Koalition", "Gesetz", "Regelung", "Verordnung", "Verfassung",
-      "Demokratie", "Diktatur", "Freiheit", "Gleichheit", "Gerechtigkeit",
-      "Menschenrecht", "Flüchtling", "Einwanderung", "Integration",
-      "Migration", "Asyl", "Bürger", "Bürgerin", "Staatsangehörigkeit",
-      "Behörde", "Amt", "Formular", "Antrag", "Genehmigung", "Ausweis",
-      "Reisepass", "Meldebestätigung", "Terminvereinbarung", "Nachweis",
-      "Unterschrift",
+      "die Regierung", "das Parlament", "der Minister", "die Ministerin",
+      "der Bundeskanzler", "die Bundeskanzlerin", "der Bundespräsident",
+      "die Bundespräsidentin", "die Wahl", "die Stimme", "die Abstimmung",
+      "die Mehrheit", "die Minderheit", "die Partei", "die Opposition",
+      "die Koalition", "das Gesetz", "die Regelung", "die Verordnung",
+      "die Verfassung", "die Demokratie", "die Diktatur", "die Freiheit",
+      "die Gleichheit", "die Gerechtigkeit", "das Menschenrecht",
+      "der Flüchtling", "die Einwanderung", "die Integration",
+      "die Migration", "das Asyl", "der Bürger", "die Bürgerin",
+      "die Staatsangehörigkeit", "die Behörde", "das Amt", "das Formular",
+      "der Antrag", "die Genehmigung", "der Ausweis", "der Reisepass",
+      "die Meldebestätigung", "die Terminvereinbarung", "der Nachweis",
+      "die Unterschrift",
 
       // Wirtschaft & Geld
-      "Wirtschaft", "Konjunktur", "Inflation", "Deflation", "Arbeitslosigkeit",
-      "Börse", "Aktie", "Investment", "Kredit", "Schuld", "Ratenzahlung",
-      "Zins", "Sparkonto", "Girokonto", "Bankkarte", "Geldautomat",
-      "Überweisungsträger", "Onlinebanking", "Haushalt", "Budget", "Einnahme",
-      "Ausgabe", "Versicherung", "Krankenversicherung", "Haftpflichtversicherung",
-      "Rentenversicherung", "Beitrag", "Beleg", "Quittung", "Rabatt",
-      "Sonderangebot", "Reklamation", "Umtausch", "Garantie", "Lieferung",
-      "Versand", "Lieferzeit", "Bestellung", "Rechnungsadresse", "Kontoangabe",
+      "die Wirtschaft", "die Konjunktur", "die Inflation", "die Deflation",
+      "die Arbeitslosigkeit", "die Börse", "die Aktie", "das Investment",
+      "der Kredit", "die Schuld", "die Ratenzahlung", "der Zins",
+      "das Sparkonto", "das Girokonto", "die Bankkarte",
+      "der Geldautomat", "der Überweisungsträger", "das Onlinebanking",
+      "der Haushalt", "das Budget", "die Einnahme", "die Ausgabe",
+      "die Versicherung", "die Krankenversicherung",
+      "die Haftpflichtversicherung", "die Rentenversicherung",
+      "der Beitrag", "der Beleg", "die Quittung", "der Rabatt",
+      "das Sonderangebot", "die Reklamation", "der Umtausch",
+      "die Garantie", "die Lieferung", "der Versand", "die Lieferzeit",
+      "die Bestellung", "die Rechnungsadresse", "die Kontoangabe",
 
       // Wohnen & Alltagsorganisation
-      "Mietvertrag", "Vermieter", "Vermieterin", "Mieter", "Mieterin",
-      "Nebenkosten", "Kaution", "Nachbar", "Nachbarin", "Hausordnung",
-      "Heizung", "Warmwasser", "Nebenkostenabrechnung", "Hausverwaltung",
-      "Hausmeisterdienst", "Mülltonne", "Biomüll", "Restmüll", "Gelber Sack",
-      "Sperrmüll", "Putzplan", "Staubsauger", "Waschmaschine", "Trockner",
-      "Stromrechnung", "Gasrechnung", "Internetanschluss", "Router",
-      "Vertragspartner", "Handwerker", "Renovierung", "Reparatur",
-      "Vorauszahlung", "Wohnungsbesichtigung", "Immobilienanzeige",
+      "der Mietvertrag", "der Vermieter", "die Vermieterin", "der Mieter",
+      "die Mieterin", "die Nebenkosten", "die Kaution", "der Nachbar",
+      "die Nachbarin", "die Hausordnung", "die Heizung", "das Warmwasser",
+      "die Nebenkostenabrechnung", "die Hausverwaltung",
+      "der Hausmeisterdienst", "die Mülltonne", "der Biomüll",
+      "der Restmüll", "der Gelbe Sack", "der Sperrmüll", "der Putzplan",
+      "der Staubsauger", "die Waschmaschine", "der Trockner",
+      "die Stromrechnung", "die Gasrechnung", "der Internetanschluss",
+      "der Router", "der Vertragspartner", "der Handwerker",
+      "die Renovierung", "die Reparatur", "die Vorauszahlung",
+      "die Wohnungsbesichtigung", "die Immobilienanzeige",
 
       // Stadt & Infrastruktur
-      "Verkehrsmittel", "Stadtplan", "Orientierung", "Innenstadt",
-      "Fußgängerzone", "Einbahnstraße", "Baustelle", "Umleitung",
-      "Fahrkarte", "Monatskarte", "Fahrplan", "Verspätung", "Haltestelle",
-      "Sitzplatz", "Stehplatz", "Reservierung", "Taxiunternehmen",
-      "Fahrgast", "Schaffner", "Kontrolleur", "Bahngleis", "Warteschlange",
-      "Parkplatz", "Parkhaus", "Parkuhr", "Parkgebühr", "Stau", "Blitzer",
-      "Geschwindigkeitsbegrenzung", "Fahrverbot", "Führerschein", "Kennzeichen",
-      "Verkehrsregel", "Unfallbericht", "Polizeiwache",
+      "das Verkehrsmittel", "der Stadtplan", "die Orientierung",
+      "die Innenstadt", "die Fußgängerzone", "die Einbahnstraße",
+      "die Baustelle", "die Umleitung", "die Fahrkarte", "die Monatskarte",
+      "der Fahrplan", "die Verspätung", "die Haltestelle",
+      "der Sitzplatz", "der Stehplatz", "die Reservierung",
+      "das Taxiunternehmen", "der Fahrgast", "der Schaffner",
+      "der Kontrolleur", "das Bahngleis", "die Warteschlange",
+      "der Parkplatz", "das Parkhaus", "die Parkuhr",
+      "die Parkgebühr", "der Stau", "der Blitzer",
+      "die Geschwindigkeitsbegrenzung", "das Fahrverbot",
+      "der Führerschein", "das Kennzeichen", "die Verkehrsregel",
+      "der Unfallbericht", "die Polizeiwache",
 
-      // Gesundheit & Körper (erweitert, erwachsen)
-      "Symptom", "Behandlung", "Therapie", "Operation", "Krankenhausaufenthalt",
-      "Sprechstunde", "Terminbestätigung", "Krankschreibung", "Rezept",
-      "Apotheke", "Tablette", "Tropfen", "Spritze", "Nebenwirkung",
-      "Notaufnahme", "Rettungswagen", "Erste Hilfe", "Untersuchung",
-      "Blutdruck", "Blutprobe", "Röntgenbild", "Impfpass", "Schmerzmittel",
-      "Physiotherapie", "Psychotherapie", "Ernährungsberatung",
-      "Fitnessstudio", "Mitgliedschaft", "Trainingsplan", "Ausdauer",
-      "Muskulatur", "Kondition", "Erholung", "Entspannung", "Stressbewältigung",
+      // Gesundheit & Körper (erweitert)
+      "das Symptom", "die Behandlung", "die Therapie", "die Operation",
+      "der Krankenhausaufenthalt", "die Sprechstunde",
+      "die Terminbestätigung", "die Krankschreibung", "das Rezept",
+      "die Apotheke", "die Tablette", "die Tropfen", "die Spritze",
+      "die Nebenwirkung", "die Notaufnahme", "der Rettungswagen",
+      "die Erste Hilfe", "die Untersuchung", "der Blutdruck",
+      "die Blutprobe", "das Röntgenbild", "der Impfpass",
+      "das Schmerzmittel", "die Physiotherapie", "die Psychotherapie",
+      "die Ernährungsberatung", "das Fitnessstudio", "die Mitgliedschaft",
+      "der Trainingsplan", "die Ausdauer", "die Muskulatur",
+      "die Kondition", "die Erholung", "die Entspannung",
+      "die Stressbewältigung",
 
-      // Ernährung & Konsum (erwachsen)
-      "Vollkornprodukt", "Nährstoff", "Protein", "Kohlenhydrat",
-      "Fettgehalt", "Kalorie", "Vitamin", "Mineralstoff", "Zutat",
-      "Konservierungsstoff", "Allergie", "Unverträglichkeit", "Laktose",
-      "Gluten", "Vegetarier", "Vegetarierin", "Veganer", "Veganerin",
-      "Ernährungsstil", "Diät", "Lebensmittelgeschäft", "Supermarktkette",
-      "Wochenmarkt", "Bestellservice", "Lieferservice", "Trinkgeld",
-      "Restaurantbesuch", "Speisekarte", "Vorspeise", "Hauptgericht",
-      "Nachspeise", "Beilage", "Getränkekarte", "Rechnungssumme",
+      // Ernährung & Konsum
+      "das Vollkornprodukt", "der Nährstoff", "das Protein",
+      "das Kohlenhydrat", "der Fettgehalt", "die Kalorie",
+      "das Vitamin", "der Mineralstoff", "die Zutat",
+      "der Konservierungsstoff", "die Allergie", "die Unverträglichkeit",
+      "die Laktose", "das Gluten", "der Vegetarier",
+      "die Vegetarierin", "der Veganer", "die Veganerin",
+      "der Ernährungsstil", "die Diät", "das Lebensmittelgeschäft",
+      "die Supermarktkette", "der Wochenmarkt", "der Bestellservice",
+      "der Lieferservice", "das Trinkgeld", "der Restaurantbesuch",
+      "die Speisekarte", "die Vorspeise", "das Hauptgericht",
+      "die Nachspeise", "die Beilage", "die Getränkekarte",
+      "die Rechnungssumme",
 
-      // Familie & Beziehungen (erwachsen)
-      "Partnerschaft", "Beziehung", "Ehe", "Hochzeit", "Scheidung",
-      "Schwangerschaft", "Geburt", "Erziehung", "Elternzeit", "Verwandter",
-      "Verwandte", "Verlobung", "Streit", "Versöhnung", "Vertrauen",
-      "Verantwortung", "Rolle", "Erwartung", "Konflikt", "Kompliment",
-      "Kritik", "Meinungsverschiedenheit", "Unterstützung", "Rücksicht",
-      "Respekt", "Freundeskreis", "Bekanntschaft", "Nachbarschaftsfest",
+      // Familie & Beziehungen
+      "die Partnerschaft", "die Beziehung", "die Ehe", "die Hochzeit",
+      "die Scheidung", "die Schwangerschaft", "die Geburt",
+      "die Erziehung", "die Elternzeit", "der Verwandter",
+      "die Verwandte", "die Verlobung", "der Streit", "die Versöhnung",
+      "das Vertrauen", "die Verantwortung", "die Rolle", "die Erwartung",
+      "der Konflikt", "das Kompliment", "die Kritik",
+      "die Meinungsverschiedenheit", "die Unterstützung", "die Rücksicht",
+      "der Respekt", "der Freundeskreis", "die Bekanntschaft",
+      "das Nachbarschaftsfest",
 
       // Freizeit, Medien & Kultur
-      "Freizeitangebot", "Hobby", "Sportverein", "Mitglied", "Mitgliedsbeitrag",
-      "Veranstaltung", "Konzert", "Ausstellung", "Theaterstück", "Oper",
-      "Festival", "Open-Air-Konzert", "Kinoabend", "Lesung", "Vortrag",
-      "Workshop", "Kreativität", "Malerei", "Fotografie", "Literatur",
-      "Roman", "Krimi", "Sachbuch", "Biografie", "Zeitschrift", "Artikel",
-      "Kommentar", "Reportage", "Dokumentation", "Nachrichtensendung",
-      "Talkshow", "Serienfolge", "Staffel", "Streamingdienst", "Abonnement",
-      "Nutzerkonto", "Einstellung", "Profilbild", "Datenschutz",
-      "Privatsphäre", "Sendezeit", "Zitat",
+      "das Freizeitangebot", "das Hobby", "der Sportverein", "das Mitglied",
+      "der Mitgliedsbeitrag", "die Veranstaltung", "das Konzert",
+      "die Ausstellung", "das Theaterstück", "die Oper", "das Festival",
+      "das Open-Air-Konzert", "der Kinoabend", "die Lesung",
+      "der Vortrag", "der Workshop", "die Kreativität", "die Malerei",
+      "die Fotografie", "die Literatur", "der Roman", "der Krimi",
+      "das Sachbuch", "die Biografie", "die Zeitschrift", "der Artikel",
+      "der Kommentar", "die Reportage", "die Dokumentation",
+      "die Nachrichtensendung", "die Talkshow", "die Serienfolge",
+      "die Staffel", "der Streamingdienst", "das Abonnement",
+      "das Nutzerkonto", "die Einstellung", "das Profilbild",
+      "der Datenschutz", "die Privatsphäre", "die Sendezeit",
+      "das Zitat",
 
-      // Reisen & Tourismus (erwachsen)
-      "Reisebüro", "Reiseveranstalter", "Fluggesellschaft", "Buchungsbestätigung",
-      "Reiseroute", "Reiseunterlagen", "Reiseversicherung", "Handgepäck",
-      "Gepäckstück", "Koffer", "Rucksackreise", "Städtetrip", "Pauschalreise",
-      "Individualreise", "Unterkunft", "Ferienwohnung", "Pension", "Hostel",
-      "Jugendherberge", "Zeltplatz", "Campingplatz", "Wohnmobil",
-      "Buchungsportal", "Bewertung", "Erfahrungsbericht", "Sightseeing",
-      "Stadtführung", "Reiseführer", "Souvenir", "Postkarte",
-      "Touristeninformation", "Reisewarnung", "Zeitzone", "Zeitverschiebung",
+      // Reisen & Tourismus
+      "das Reisebüro", "der Reiseveranstalter", "die Fluggesellschaft",
+      "die Buchungsbestätigung", "die Reiseroute",
+      "die Reiseunterlagen", "die Reiseversicherung", "das Handgepäck",
+      "das Gepäckstück", "der Koffer", "die Rucksackreise",
+      "der Städtetrip", "die Pauschalreise", "die Individualreise",
+      "die Unterkunft", "die Ferienwohnung", "die Pension", "das Hostel",
+      "die Jugendherberge", "der Zeltplatz", "der Campingplatz",
+      "das Wohnmobil", "das Buchungsportal", "die Bewertung",
+      "der Erfahrungsbericht", "das Sightseeing", "die Stadtführung",
+      "der Reiseführer", "das Souvenir", "die Postkarte",
+      "die Touristeninformation", "die Reisewarnung", "die Zeitzone",
+      "die Zeitverschiebung",
 
-      // Umwelt & Natur (B1–B2)
-      "Umwelt", "Klimawandel", "Klimaschutz", "Treibhausgas", "Emission",
-      "Luftverschmutzung", "Feinstaub", "Waldbrand", "Überflutung", "Dürre",
-      "Umweltschutzorganisation", "Naturschutzgebiet", "Nationalpark",
-      "Solarenergie", "Windkraft", "Wasserkraft", "Mülltrennung",
-      "Recycling", "Rohstoff", "Ressource", "Plastik", "Verpackung",
-      "Ökosystem", "Artenvielfalt", "Lebensraum", "Tierschutz",
-      "Umweltbewusstsein", "Energiewende", "Stromverbrauch",
-      "Energiesparlampe", "Ladestation", "Elektroauto",
+      // Umwelt & Natur
+      "die Umwelt", "der Klimawandel", "der Klimaschutz",
+      "das Treibhausgas", "die Emission", "die Luftverschmutzung",
+      "der Feinstaub", "der Waldbrand", "die Überflutung",
+      "die Dürre", "die Umweltschutzorganisation", "das Naturschutzgebiet",
+      "der Nationalpark", "die Solarenergie", "die Windkraft",
+      "die Wasserkraft", "die Mülltrennung", "das Recycling",
+      "der Rohstoff", "die Ressource", "das Plastik",
+      "die Verpackung", "das Ökosystem", "die Artenvielfalt",
+      "der Lebensraum", "der Tierschutz", "das Umweltbewusstsein",
+      "die Energiewende", "der Stromverbrauch",
+      "die Energiesparlampe", "die Ladestation", "das Elektroauto",
 
       // Technik & Digitales
-      "Smartphone", "Laptop", "Tablet", "Bildschirm", "Tastatur",
-      "Kopfhörer", "Lautsprecher", "Ladekabel", "Akkulaufzeit", "Dateiformat",
-      "Cloudspeicher", "Sicherheitskopie", "Benutzerkonto", "Passwort",
-      "Sicherheitscode", "Software", "Hardware", "Betriebssystem",
-      "Anwendung", "App", "Update", "Fehlermeldung", "Netzwerk",
-      "WLAN", "Verbindung", "Bandbreite", "Upload", "Download",
-      "Dateianhang", "E-Mail-Adresse", "Spamfilter", "Benachrichtigung",
-      "Algorithmus", "Suchmaschine", "Suchbegriff", "Trefferliste",
-      "Soziales Netzwerk", "Follower", "Influencer", "Kommentarbereich",
-      "Bewertungssystem",
+      "das Smartphone", "der Laptop", "das Tablet", "der Bildschirm",
+      "die Tastatur", "der Kopfhörer", "der Lautsprecher",
+      "das Ladekabel", "die Akkulaufzeit", "das Dateiformat",
+      "der Cloudspeicher", "die Sicherheitskopie", "das Benutzerkonto",
+      "das Passwort", "der Sicherheitscode", "die Software",
+      "die Hardware", "das Betriebssystem", "die Anwendung", "die App",
+      "das Update", "die Fehlermeldung", "das Netzwerk", "das WLAN",
+      "die Verbindung", "die Bandbreite", "der Upload", "der Download",
+      "der Dateianhang", "die E-Mail-Adresse", "der Spamfilter",
+      "die Benachrichtigung", "der Algorithmus", "die Suchmaschine",
+      "der Suchbegriff", "die Trefferliste", "das Soziale Netzwerk",
+      "der Follower", "der Influencer", "der Kommentarbereich",
+      "das Bewertungssystem",
 
       // Arbeit 2: Bürokommunikation & Organisation
-      "Anhang", "Betreff", "Verteiler", "Protokoll", "Tagesordnung",
-      "Rückmeldung", "Rückfrage", "Rücksprache", "Absprache", "Zuständigkeit",
-      "Vertretung", "Urlaubsantrag", "Genehmigung", "Projektplan",
-      "Priorität", "Zwischenstand", "Meilenstein", "Arbeitsgruppe",
-      "Teamarbeit", "Einzelarbeit", "Konfliktlösung", "Motivation",
-      "Leistung", "Feedback", "Fortschritt", "Verbesserungsvorschlag",
+      "der Anhang", "der Betreff", "der Verteiler", "das Protokoll",
+      "die Tagesordnung", "die Rückmeldung", "die Rückfrage",
+      "die Rücksprache", "die Absprache", "die Zuständigkeit",
+      "die Vertretung", "der Urlaubsantrag", "die Genehmigung",
+      "der Projektplan", "die Priorität", "der Zwischenstand",
+      "der Meilenstein", "die Arbeitsgruppe", "die Teamarbeit",
+      "die Einzelarbeit", "die Konfliktlösung", "die Motivation",
+      "die Leistung", "das Feedback", "der Fortschritt",
+      "der Verbesserungsvorschlag",
 
       // Recht & Verwaltung
-      "Gericht", "Anwalt", "Anwältin", "Klage", "Urteil", "Strafe",
-      "Bußgeld", "Verstoß", "Zeuge", "Zeugin", "Polizeibericht",
-      "Anzeige", "Diebstahl", "Einbruch", "Beschwerde", "Fristverlängerung",
-      "Widerspruch", "Einspruch", "Versicherungsfall", "Schadenmeldung",
-      "Bedingung", "Klausel", "Datenschutzerklärung", "Nutzungsbedingung",
-      "Zustimmung", "Widerruf", "Vertragspartner", "Rechtsberatung",
+      "das Gericht", "der Anwalt", "die Anwältin", "die Klage",
+      "das Urteil", "die Strafe", "das Bußgeld", "der Verstoß",
+      "der Zeuge", "die Zeugin", "der Polizeibericht", "die Anzeige",
+      "der Diebstahl", "der Einbruch", "die Beschwerde",
+      "die Fristverlängerung", "der Widerspruch", "der Einspruch",
+      "der Versicherungsfall", "die Schadenmeldung", "die Bedingung",
+      "die Klausel", "die Datenschutzerklärung", "die Nutzungsbedingung",
+      "die Zustimmung", "der Widerruf", "der Vertragspartner",
+      "die Rechtsberatung",
 
       // Gefühle, Charakter & Kommunikation
-      "Gefühl", "Stimmung", "Laune", "Enttäuschung", "Begeisterung",
-      "Überraschung", "Erleichterung", "Besorgnis", "Verzweiflung",
-      "Zweifel", "Zufriedenheit", "Dankbarkeit", "Vertrauen",
-      "Verständnis", "Missverständnis", "Ehrlichkeit", "Geduld",
-      "Höflichkeit", "Rücksichtnahme", "Einfühlungsvermögen", "Mut",
-      "Humor", "Ironie", "Missbrauch", "Gerücht", "Aussage", "Argument",
-      "Begründung", "Diskussion", "Debatte", "Standpunkt", "Meinung",
-      "Überzeugung", "Kompromiss", "Vereinbarung",
+      "das Gefühl", "die Stimmung", "die Laune", "die Enttäuschung",
+      "die Begeisterung", "die Überraschung", "die Erleichterung",
+      "die Besorgnis", "die Verzweiflung", "der Zweifel",
+      "die Zufriedenheit", "die Dankbarkeit", "das Vertrauen",
+      "das Verständnis", "das Missverständnis", "die Ehrlichkeit",
+      "die Geduld", "die Höflichkeit", "die Rücksichtnahme",
+      "das Einfühlungsvermögen", "der Mut", "der Humor", "die Ironie",
+      "der Missbrauch", "das Gerücht", "die Aussage", "das Argument",
+      "die Begründung", "die Diskussion", "die Debatte",
+      "der Standpunkt", "die Meinung", "die Überzeugung",
+      "der Kompromiss", "die Vereinbarung",
 
       // Zeit, Planung & Organisation
-      "Zukunftsplanung", "Tagesablauf", "Wochenplanung", "Frist",
-      "Erinnerung", "Aufgabe", "To-do-Liste", "Notiz", "Kalendereintrag",
-      "Erledigung", "Verschiebung", "Absage", "Bestätigung", "Zeitdruck",
-      "Zeitmanagement", "Pünktlichkeit", "Verspätung", "Prokrastination",
-      "Vorbereitung", "Nachbereitung",
+      "die Zukunftsplanung", "der Tagesablauf", "die Wochenplanung",
+      "die Frist", "die Erinnerung", "die Aufgabe", "die To-do-Liste",
+      "die Notiz", "der Kalendereintrag", "die Erledigung",
+      "die Verschiebung", "die Absage", "die Bestätigung",
+      "der Zeitdruck", "das Zeitmanagement", "die Pünktlichkeit",
+      "die Verspätung", "die Prokrastination", "die Vorbereitung",
+      "die Nachbereitung",
 
       // Kultur, Identität & Werte
-      "Tradition", "Gewohnheit", "Ritual", "Vorurteil", "Klischee",
-      "Toleranz", "Respekt", "Konfliktkultur", "Weltanschauung",
-      "Religion", "Glaubensrichtung", "Sprachvariante", "Dialekt",
-      "Muttersprache", "Fremdsprache", "Kulturunterschied", "Missverständnis",
-      "Lebensstil", "Lebensqualität", "Wertvorstellung", "Gleichberechtigung",
-      "Diskriminierung", "Chancengleichheit", "Integration", "Inklusion",
+      "die Tradition", "die Gewohnheit", "das Ritual", "das Vorurteil",
+      "das Klischee", "die Toleranz", "der Respekt", "die Konfliktkultur",
+      "die Weltanschauung", "die Religion", "die Glaubensrichtung",
+      "die Sprachvariante", "der Dialekt", "die Muttersprache",
+      "die Fremdsprache", "der Kulturunterschied", "das Missverständnis",
+      "der Lebensstil", "die Lebensqualität", "die Wertvorstellung",
+      "die Gleichberechtigung", "die Diskriminierung",
+      "die Chancengleichheit", "die Integration", "die Inklusion",
 
       // Sonstige B1–B2-Alltagsbegriffe
-      "Haushaltsgerät", "Panne", "Komfort", "Zufall", "Einfluss",
-      "Auswirkung", "Folge", "Voraussetzung", "Hintergrund", "Zusammenhang",
-      "Zusatz", "Überblick", "Auswahl", "Alternative", "Möglichkeit",
-      "Beispiel", "Gegenteil", "Vergleich", "Unterschied", "Ähnlichkeit",
-      "Entwicklung", "Verlauf", "Trend", "Anstieg", "Rückgang", "Zunahme",
-      "Abnahme", "Steigerung", "Verringerung", "Umfrage", "Ergebnis",
-      "Bewertung", "Kriterium", "Bedingung", "Vorteil", "Nachteil",
-      "Lösungsvorschlag", "Herausforderung", "Schwierigkeit", "Fehler",
-      "Missverständnis", "Erfolg", "Misserfolg", "Erfahrung", "Eindruck"
+      "das Haushaltsgerät", "die Panne", "der Komfort", "der Zufall",
+      "der Einfluss", "die Auswirkung", "die Folge",
+      "die Voraussetzung", "der Hintergrund", "der Zusammenhang",
+      "der Zusatz", "der Überblick", "die Auswahl", "die Alternative",
+      "die Möglichkeit", "das Beispiel", "das Gegenteil",
+      "der Vergleich", "der Unterschied", "die Ähnlichkeit",
+      "die Entwicklung", "der Verlauf", "der Trend", "der Anstieg",
+      "der Rückgang", "die Zunahme", "die Abnahme", "die Steigerung",
+      "die Verringerung", "die Umfrage", "das Ergebnis",
+      "die Bewertung", "das Kriterium", "die Bedingung",
+      "der Vorteil", "der Nachteil", "der Lösungsvorschlag",
+      "die Herausforderung", "die Schwierigkeit", "der Fehler",
+      "das Missverständnis", "der Erfolg", "der Misserfolg",
+      "die Erfahrung", "der Eindruck"
     ];
 
-    // ------------ Spiel-Logik (für beide Modi) ------------
+    // ------------ Spiel-Logik ------------
 
     const wordBox = document.getElementById("wordBox");
+    const translationEl = document.getElementById("translation");
     const nextBtn = document.getElementById("nextBtn");
-    const counterEl = document.getElementById("counter");
+    const translateBtn = document.getElementById("translateBtn");
     const infoEl = document.getElementById("info");
     const reshuffleOnEnd = document.getElementById("reshuffleOnEnd");
     const hideCounter = document.getElementById("hideCounter");
@@ -556,6 +699,7 @@
     let shuffledWords = [];
     let index = 0;
     let shown = 0;
+    let currentWord = "";
 
     function shuffle(a) {
       for (let i = a.length - 1; i > 0; i--) {
@@ -574,8 +718,10 @@
       shuffle(shuffledWords);
       index = 0;
       shown = 0;
+      currentWord = "";
       wordBox.innerHTML =
         '<span class="placeholder">Auf „Nächstes Wort“ klicken</span>';
+      translationEl.textContent = "";
       updateCounter();
     }
 
@@ -586,7 +732,6 @@
       }
       infoEl.style.visibility = "visible";
       const mode = modeSelect.value === "adult" ? "Erwachsene" : "Kinder";
-      counterEl.textContent = `${shown} / ${currentList.length}`;
       infoEl.innerHTML =
         `<span class="counter">${shown} / ${currentList.length}</span>` +
         `&nbsp;Wörter gezeigt (${mode})`;
@@ -607,13 +752,65 @@
       const word = shuffledWords[index];
       index++;
       shown++;
+      currentWord = word;
 
       wordBox.textContent = word;
       wordBox.classList.remove("placeholder");
+      translationEl.textContent = ""; // clear old translation
       updateCounter();
     }
 
+    function getBaseNoun(fullWord) {
+      // remove leading der/die/das (and some cases like dem, den) if present
+      if (!fullWord) return "";
+      return fullWord.replace(/^(der|die|das|dem|den|des)\s+/i, "").trim();
+    }
+
+    async function translateCurrentWord() {
+      if (!currentWord) {
+        translationEl.textContent = "Bitte zuerst ein Wort erzeugen.";
+        return;
+      }
+
+      const noun = getBaseNoun(currentWord);
+      if (!noun) {
+        translationEl.textContent = "Konnte das Wort nicht erkennen.";
+        return;
+      }
+
+      translationEl.textContent = "Übersetze…";
+      translateBtn.disabled = true;
+
+      try {
+        // Simple free API; good genug für ein Lernspiel.
+        const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(
+          noun
+        )}&langpair=de|en`;
+        const res = await fetch(url);
+        if (!res.ok) {
+          throw new Error("HTTP-Fehler");
+        }
+        const data = await res.json();
+        const translated =
+          (data && data.responseData && data.responseData.translatedText) ||
+          "";
+
+        if (translated) {
+          translationEl.innerHTML = `<strong>EN:</strong> ${translated}`;
+        } else {
+          translationEl.textContent =
+            "Keine Übersetzung gefunden. Vielleicht anders formulieren?";
+        }
+      } catch (e) {
+        translationEl.textContent =
+          "Übersetzung fehlgeschlagen (offline oder Serverproblem).";
+      } finally {
+        translateBtn.disabled = false;
+      }
+    }
+
     nextBtn.addEventListener("click", showNextWord);
+    translateBtn.addEventListener("click", translateCurrentWord);
     reshuffleOnEnd.addEventListener("change", updateCounter);
     hideCounter.addEventListener("change", updateCounter);
     modeSelect.addEventListener("change", () => setMode(modeSelect.value));
