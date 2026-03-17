@@ -136,7 +136,7 @@ Lastly, I wanted a nice favicon, which I'd never had before. But luckily, nowada
 
 Github Pages provides extensive documentation, making everything straightforward. Jekyll is already a supported workflow, so when setting up your deployment pipeline, you simply need to select the ready-to-use `Deploy Jekyll site to Pages` workflow, and the magic of automation takes over.
 
-If I recall correctly, the only code-wise change I had to make was to update the Ruby version in my workflow file. You can check it out [here](https://github.com/graffzon/zonovme/blob/master/.github/workflows/jekyll.yml).
+If I recall correctly, the only code-wise change I had to make was to update the Ruby version in my workflow file. You can check it out [here](https://github.com/kzonov/zonovme/blob/master/.github/workflows/jekyll.yml).
 
 Here's the final screen of the Github Pages tab:
 
