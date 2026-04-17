@@ -112,6 +112,18 @@ HEADER STYLING
 	}
 }
 
+.kofi-header {
+	float: left;
+	clear: none;
+	padding: 0 0 0 10px;
+	line-height: 3em;
+	display: inline-block;
+
+	img {
+		vertical-align: middle;
+	}
+}
+
 // Large Header Size
 
 .header--large {

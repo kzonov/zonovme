@@ -388,6 +388,39 @@ POST NAV STYLING
 }
 
 /***************
+KOFI STYLING
+***************/
+
+.kofi-header {
+	display: block;
+	clear: left;
+	padding: 0.5rem 0 0 5px;
+
+	img {
+		margin: 0;
+		opacity: 0.85;
+		transition: opacity 0.2s ease-in-out;
+
+		&:hover {
+			opacity: 1;
+		}
+	}
+}
+
+.footer-kofi {
+	margin: 0.5rem 0;
+
+	img {
+		opacity: 0.85;
+		transition: opacity 0.2s ease-in-out;
+
+		&:hover {
+			opacity: 1;
+		}
+	}
+}
+
+/***************
 FOOTER STYLING
 ***************/
 
