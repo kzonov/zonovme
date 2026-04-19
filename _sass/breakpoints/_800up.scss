@@ -87,27 +87,37 @@ HEADER STYLING
 			margin: 0;
 
 			li {
-				display: inline;
-				line-height: 3em;
+				display: inline-block;
+				line-height: 1;
 				background: none;
-				padding: 0 5px;
+				padding: 0;
+				margin-right: 6px;
 				border: none;
 
 				a {
-					color: $primary-color;
-					font-size: .9em;
+					color: white;
+					font-size: .85em;
 					text-decoration: none;
-					padding: 0 .25em;
-					text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.8);
+					padding: .45em .9em;
+					background: rgba(0, 0, 0, 0.55);
+					backdrop-filter: blur(4px);
+					-webkit-backdrop-filter: blur(4px);
+					border-radius: 999px;
+					transition: background 0.2s ease-in-out;
+					font-family: $sans-serif;
+					font-weight: 600;
+					letter-spacing: 0.02em;
 
 					&:hover {
-						color: lighten($primary-color, 15%);
+						background: rgba(0, 0, 0, 0.8);
+						color: white;
 					}
 				}
 
 				&.current {
-					padding-bottom: .25em;
-					border-bottom: 4px solid rgba($primary-color, .6);
+					a {
+						background: $primary-color;
+					}
 				}
 			}
 		}
