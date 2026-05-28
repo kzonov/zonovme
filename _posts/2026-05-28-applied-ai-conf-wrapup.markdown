@@ -168,6 +168,20 @@ No Haystack integration with Kafka or Flink exists currently — something worth
 
 <!-- MORE TALKS TO BE ADDED THROUGHOUT THE DAY -->
 
+## Parloa: the engineer as product-minded architect
+
+One line from the [Parloa](https://parloa.com) talk that I'm still turning over: **"the engineer is now a product-minded architect."**
+
+Parloa builds an AI agent management platform for enterprise contact centers — Allianz, Booking.com, SAP are customers, $3B valuation as of January this year. So when they say this, they're not talking about hobby projects.
+
+The framing resonates though. When you're building agent-driven systems, the line between "does it work technically" and "does it do the right thing for the user" collapses. You can't hand off the product decisions to a PM and go back to your terminal. The agent's behavior, its tone, when it escalates, when it doesn't — those are engineering decisions with product consequences. An engineer who doesn't think in those terms is going to build something that passes tests and fails in production in ways no test would catch.
+
+It's a role shift I feel working on observability at deepset. Instrumenting a system well isn't just a technical question. It's: what does the person on call actually need to know? What does "this is working" mean to someone who uses the product, not someone who reads the metrics? The tooling I build shapes what people pay attention to.
+
+---
+
+<!-- MORE TALKS TO BE ADDED THROUGHOUT THE DAY -->
+
 ---
 
 ## Takeaways
