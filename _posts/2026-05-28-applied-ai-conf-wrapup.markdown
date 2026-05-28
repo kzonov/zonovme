@@ -39,7 +39,7 @@ Here's what stuck.
 
 ## Dust: agents are not a personal tool, they're company infrastructure
 
-The first talk was from [Dust](https://dust.tt), and the framing they opened with landed immediately: stop thinking of an AI agent as something that belongs to a person. Think of it as something that belongs to the organization.
+The first talk was from [Stanislas Polu](https://www.linkedin.com/in/spolu/) at [Dust](https://dust.tt) — formerly at OpenAI, now co-founder — and the framing he opened with landed immediately: stop thinking of an AI agent as something that belongs to a person. Think of it as something that belongs to the organization.
 
 Their slide said "Agents Deserve Servers, Not Computers" — and the analogy is actually pretty clean. Today, most agent setups look like the personal computer model: one agent, one sandbox, one person. Dust is pushing toward a shared server model where a single agent (or set of agents) runs on shared infrastructure — SQLite db, custom UI, bash access, auth layer — accessible by humans, teams, and other agents alike.
 
@@ -80,7 +80,7 @@ The bi-directional harness diagram — Sandbox, Projects, Tasks, Conversations, 
 
 The second talk took a different approach — instead of architecture philosophy, it was a live autopsy of a real agent.
 
-[Clelia Astra Bertelli](https://github.com/AstraBert) (AstraBert on GitHub) built [LobsterX](https://github.com/AstraBert/workflows-acp/blob/main/packages/lobsterx/README.md) — a document-processing agent that lives in Telegram. You send it a PDF and a task; it parses, extracts, classifies, reasons, and replies when it's done. The whole agent is ~600 lines of code. The workflow orchestration underneath is ~1.5k. Three swappable LLM providers.
+[Clelia Astra Bertelli](https://github.com/AstraBert) — DevRel at LlamaIndex, AstraBert on GitHub — built [LobsterX](https://github.com/AstraBert/workflows-acp/blob/main/packages/lobsterx/README.md) — a document-processing agent that lives in Telegram. You send it a PDF and a task; it parses, extracts, classifies, reasons, and replies when it's done. The whole agent is ~600 lines of code. The workflow orchestration underneath is ~1.5k. Three swappable LLM providers.
 
 ![What is LobsterX](/assets/2026/05/lobsterx-what-is.jpg)
 
@@ -150,7 +150,7 @@ This is the right way to talk about agent safety. The goal isn't zero risk. The 
 
 ## Kafka as agent infrastructure
 
-One of the other talks made a case I wasn't expecting: use Kafka and Flink SQL as the communication backbone for agents, rather than synchronous A2A protocols.
+[Steffen Hoellinger](https://www.linkedin.com/in/steffen-hoellinger/) from [Confluent](https://confluent.io) made a case I wasn't expecting: use Kafka and Flink SQL as the communication backbone for agents, rather than synchronous A2A protocols.
 
 ![Flink SQL for stream processing](/assets/2026/05/flink-sql-agents.jpg)
 
@@ -180,7 +180,7 @@ It's a role shift I feel working on observability at deepset. Instrumenting a sy
 
 ## Gradium: full-duplex voice AI
 
-Not my domain, but a talk worth noting: [Gradium](https://gradium.ai) making the case that current voice AI is fundamentally half-duplex.
+Not my domain, but a talk worth noting: [Neil Zeghidour](https://www.linkedin.com/in/nzeghidour/) at [Gradium](https://gradium.ai) making the case that current voice AI is fundamentally half-duplex.
 
 ![Half-duplex vs full-duplex](/assets/2026/05/gradium-duplex.jpg)
 
@@ -194,9 +194,9 @@ The product they announced is **Phonon** — a ~100M parameter TTS model, privat
 
 ---
 
-## The caching talk: prompt caching as the main cost lever
+## Langdock: prompt caching as the main cost lever
 
-Caching came up in several conversations today, but one talk went deep on it specifically in the context of LLM cost management.
+[Balázs Csomor](https://www.linkedin.com/in/balazscsomor/) from [Langdock](https://langdock.com) went deep on LLM cost management — and caching was the whole answer.
 
 ![What can you do about LLM costs](/assets/2026/05/caching-llm-costs.jpg)
 
@@ -222,7 +222,7 @@ Worth noting: [Langfuse](https://langfuse.com) — whose observability UI appear
 
 ## Peec AI: the heavy model teaches, the cheap model ships
 
-[Peec AI](https://peec.ai) is a Berlin company tracking brand visibility across AI search engines — ChatGPT, Claude, Gemini. The talk was about how they built the AI inside their product.
+[Peec AI](https://peec.ai) is a Berlin company tracking brand visibility across AI search engines — ChatGPT, Claude, Gemini. [Oğuz Gültepe](https://www.linkedin.com/in/oguzgultepe/), their Senior AI Engineer, gave a talk about how they built the AI inside their product.
 
 This one had one of the best single slides of the day.
 
@@ -288,7 +288,7 @@ That last part is what makes it practical. Changing a frozen prompt is a deploy.
 
 ## Miro: collaboration in the AI era
 
-[Miro](https://miro.com)'s talk was about keeping teams aligned when agents are doing more of the work. It was a mixed bag, but one slide landed hard:
+[Łukasz Sągol](https://www.linkedin.com/in/lukaszsagol/), Director of Engineering at [Miro](https://miro.com), gave a talk about keeping teams aligned when agents are doing more of the work. It was a mixed bag, but one slide landed hard:
 
 ![Cursor made typing 10x faster](/assets/2026/05/miro-typing-bottleneck.jpg)
 
@@ -310,7 +310,7 @@ The ADR idea for AI decisions is the one I'll probably use. Engineering teams wr
 
 ## Fin: the company that changed everything, including its name
 
-The closing keynote was from [Fin](https://fin.ai) — formerly known as Intercom, rebranded just two weeks before the conference. The speaker was the most energetic of the day, and the talk landed accordingly.
+The closing keynote was from [Des Traynor](https://ie.linkedin.com/in/destraynor), co-founder and CSO of [Fin](https://fin.ai) — formerly known as Intercom, rebranded just two weeks before the conference. The most energetic talk of the day.
 
 The opening slide was a wall of text, and intentionally so:
 
@@ -356,6 +356,36 @@ The "new muscles" list: empirical evaluation, scientific rigor, causality (why d
 ![New muscles and research](/assets/2026/05/fin-research.jpg)
 
 The role shift message echoed what Parloa said earlier: the new designer is also the front-end engineer, the new engineer is also the product manager. You own your domain end to end. The separation of concerns that used to make sense in a slower-moving world doesn't map onto how AI products get built.
+
+---
+
+## Other talks worth a mention
+
+Not every talk made it into my notes in detail, but a few deserve a line.
+
+**[Clara Matos](https://www.linkedin.com/in/claramatos/) · Sword Health — "Beyond Benchmarks: How Evaluations Ensure Safety at Scale in LLM Applications"**
+
+[Sword Health](https://swordhealth.com) uses AI for physical therapy — Clara leads Applied AI there and works on clinical safety validation. The title alone is worth sitting with. Standard benchmarks tell you if a model is *good*; they don't tell you if it's *safe at the specific task you're deploying it for*. Sword's Phoenix system gives real-time therapy feedback — the stakes for a bad output are different than a chatbot getting a recipe slightly wrong. This connects directly to the Peec AI thread: the rewards you define are your specification, and medicine is a domain where the unstated intent matters a lot.
+
+**[Simon Edwardsson](https://www.linkedin.com/in/simonedwardsson/) · V7 — "Building Sandcastles for Agents: Safe Execution at Production Scale"**
+
+[V7](https://v7labs.com) builds AI data orchestration and workflow tools. "Sandcastles" as a metaphor for agent sandboxing is good — sturdy enough to be useful, but bounded and contained, and you're not upset when the tide comes in. This is the same thesis as the LobsterX virtual filesystem and the Dust egress proxy, just at production workflow scale. The blast-radius theme again.
+
+**[Alena Astrakhantseva](https://www.linkedin.com/in/alenaastra/) · dltHub — "Agents now build 10x more data pipelines than developers. Now what?"**
+
+[dltHub](https://dlthub.com) builds open-source ELT tooling for data pipelines. The talk title is the whole question: if agents are the ones generating pipelines now, how do you trust what they produce? Governance, observability, and auditability of AI-generated data infrastructure — an SRE's problem dressed up as an agent problem.
+
+**[Giselle van Dongen](https://www.linkedin.com/in/giselle-van-dongen/) · Restate — "Building the Missing Infrastructure Layer for Agents and Distributed Applications"**
+
+[Restate](https://restate.dev) is a durable execution framework — think reliable async/await, stateful workflows, resilient RPC. The "missing infrastructure layer" framing resonates: most agent orchestration today is built on either bare HTTP or heavy workflow engines, and there's a real gap in the middle for something that handles retries, state, and failure recovery without requiring a separate database. Worth watching if you're building anything that needs to survive a process restart.
+
+**[Lucia Loher](https://de.linkedin.com/in/lucia-loher) & [Patrick Löber](https://www.linkedin.com/in/patrick-löber/) · Google DeepMind — "From Caching to Batching to Flex — How to optimize AI system for production"**
+
+A natural companion to the Langdock caching talk. Loher leads Gemini API batch mode at Google DeepMind — 50% cost reduction for workloads that can tolerate 24-hour turnaround. The caching → batching → flex progression as a cost optimization ladder is a useful framework. Not every inference needs to happen in real time.
+
+**[Bruno Show](https://www.linkedin.com/in/brunoshow/) · Choco — "Model Routing in Production: What We Learned the Hard Way"**
+
+[Choco](https://choco.com) is a food supply-chain platform. Model routing in production — picking the right model dynamically based on task complexity and cost constraints — is the operational complement to everything Peec AI was talking about at the architecture level. The "hard way" framing suggests there are failure modes worth knowing about.
 
 ---
 
