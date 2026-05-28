@@ -166,8 +166,6 @@ No Haystack integration with Kafka or Flink exists currently — something worth
 
 ---
 
-<!-- MORE TALKS TO BE ADDED THROUGHOUT THE DAY -->
-
 ## Parloa: the engineer as product-minded architect
 
 One line from the [Parloa](https://parloa.com) talk that I'm still turning over: **"the engineer is now a product-minded architect."**
@@ -180,7 +178,45 @@ It's a role shift I feel working on observability at deepset. Instrumenting a sy
 
 ---
 
-<!-- MORE TALKS TO BE ADDED THROUGHOUT THE DAY -->
+## Gradium: full-duplex voice AI
+
+Not my domain, but a talk worth noting: [Gradium](https://gradium.ai) making the case that current voice AI is fundamentally half-duplex.
+
+![Half-duplex vs full-duplex](/assets/2026/05/gradium-duplex.jpg)
+
+The analogy is a good one. A walkie-talkie is half-duplex — one side talks, the other listens, you swap. A phone call is full-duplex — both sides can make noise at the same time. Human conversation works the same way: the listening party constantly produces small signals ("oh", "hmm", "right") that aren't interruptions, they're acknowledgements that keep the other person talking. Today's voice AI treats all of that as interruption and trips over it.
+
+Gradium was founded by Neil Zeghidour, formerly of Google DeepMind and Kyutai — the research lab that released [Moshi](https://moshi.chat), the open-source full-duplex conversational AI they've commercialized.
+
+The product they announced is **Phonon** — a ~100M parameter TTS model, private beta currently. Runs offline at 6x real-time on a single CPU core, which means it can live on a phone without ever touching a server. At that size, interesting for privacy-sensitive or truly offline use cases.
+
+![Gradium Phonon](/assets/2026/05/gradium-phonon.jpg)
+
+---
+
+## The caching talk: prompt caching as the main cost lever
+
+Caching came up in several conversations today, but one talk went deep on it specifically in the context of LLM cost management.
+
+![What can you do about LLM costs](/assets/2026/05/caching-llm-costs.jpg)
+
+The setup was a good rhetorical device: here's everything you *could* do to cut LLM costs when that's your core business — raise prices, add usage limits, remove expensive models, limit tool calling, prompt compression, smarter context windows. All struck through. The answer left standing: optimize prompt caching.
+
+The nuts and bolts comparison of how OpenAI and Anthropic handle it differently was useful — the kind of operational detail that's obvious in hindsight but easy to miss:
+
+![Turn on prompt caching](/assets/2026/05/caching-config.jpg)
+
+OpenAI enables caching by default with a 5–10 minute retention window, but you can extend to 24 hours via `prompt_cache_retention` and customize the cache key. Anthropic disables it by default and gives you two modes — automatic caching or explicit cache breakpoints — with TTL-based pricing: 5 minutes at 1.25x cost, 1 hour at 2x.
+
+The second half was about making this observable. The dashboard they showed tracked **Model Cache Rate** across all models in production — gpt-5.2, claude-opus-4-6, gpt-5.4, claude-sonnet-4-6 — with average hit rates in the 70–80% range. The token composition view breaking down cached vs non-cached tokens per request, with a note that green (cached) should consistently grow to cover the full bar as a conversation progresses, was a clean way to think about it.
+
+![Build observability for caching](/assets/2026/05/caching-observability.jpg)
+
+![Cache hit rate dashboard](/assets/2026/05/caching-dashboard.jpg)
+
+This resonates with the observability work I'm doing at deepset. Cache hit rate is exactly the kind of metric that doesn't feel important until you've been paying for tokens you didn't need to pay for for three months. It belongs on the same dashboard as latency and error rate.
+
+Worth noting: [Langfuse](https://langfuse.com) — whose observability UI appeared in the slides — has an official Haystack integration. If you're building on Haystack and want this kind of cache visibility, it's already there.
 
 ---
 
