@@ -220,6 +220,60 @@ Worth noting: [Langfuse](https://langfuse.com) — whose observability UI appear
 
 ---
 
+## Peec AI: the heavy model teaches, the cheap model ships
+
+This one had one of the best single slides of the day.
+
+![A heavy model judges what a cheap model produces](/assets/2026/05/peecai-asymmetry.jpg)
+
+*"A heavy model can judge what a cheap model produces."*
+
+The idea is elegant: expensive models are slow and costly to run in production, but they're genuinely smarter at evaluating quality. Cheap models are fast and cheap to run, but they need guidance. So don't use the expensive model in production — use it to teach the cheap model, then throw it away.
+
+The mechanism is a tight feedback loop:
+
+![The loop](/assets/2026/05/peecai-loop.jpg)
+
+1. **Generate** — small model proposes a candidate based on the current prompt
+2. **Reward** — three judges score it in parallel: relevance, tone-appropriateness, response-ability. Each returns a score *and a reason*
+3. **Optimize** — heavy model reads the full history (scores, explanations, previous prompt) and rewrites the prompt
+4. **Iterate** — back to step one, until reward saturates or the prompt stops moving
+5. **Ship** — freeze the prompt, discard the heavy model. Production runs only the small model
+
+The detail I found sharp: the optimizer never sees a raw number. It sees *"tone-appropriateness 0.3, profile is dry and self-deprecating, opener is enthusiastic and uses three exclamation points."* The explanation is the gradient.
+
+No labeled data needed. Runs offline.
+
+### Distill principles, not examples
+
+The other key design decision: they instruct the optimizer to extract *principles*, not memorize good outputs.
+
+![Distill principles not examples](/assets/2026/05/peecai-principles.jpg)
+
+After four turns, a generic instruction like "write an engaging opener based on the profile" grows into: reference one concrete detail from the profile, match the writing style of the bio, end with a question answerable in one sentence. The heavy model is reverse-engineering what makes a good output good, then encoding that as instruction.
+
+That distinction matters. If you memorize examples, you overfit. If you extract principles, you generalize.
+
+### Reward hacking
+
+The central failure mode they named:
+
+![Reward hacking](/assets/2026/05/peecai-reward-hacking.jpg)
+
+*"The optimizer satisfies every defined reward, while violating the unstated intent. Your reward model is your specification. Any gap is a hole the optimizer will find."*
+
+They cited Goodhart, 1975: "When a measure becomes a target, it ceases to be a good measure." Fifty years older. Same idea.
+
+The takeaway slide was the best line of the day:
+
+![The loop is easy, the rewards are the engineering](/assets/2026/05/peecai-takeaway.jpg)
+
+**"The loop is easy. The rewards are the engineering."**
+
+Reward hacking isn't a risk to mitigate, it's the default. The advice: build the loop flexible enough that you can add a new reward in an afternoon, because you'll need to.
+
+---
+
 ## Takeaways
 
 <!-- TO BE WRITTEN AT END OF DAY -->
