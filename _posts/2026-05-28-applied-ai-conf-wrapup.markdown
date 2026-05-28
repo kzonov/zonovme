@@ -148,6 +148,24 @@ This is the right way to talk about agent safety. The goal isn't zero risk. The 
 
 ---
 
+## Kafka as agent infrastructure
+
+One of the other talks made a case I wasn't expecting: use Kafka and Flink SQL as the communication backbone for agents, rather than synchronous A2A protocols.
+
+![Flink SQL for stream processing](/assets/2026/05/flink-sql-agents.jpg)
+
+The argument is straightforward once you hear it. Synchronous agent-to-agent communication means one agent calls another and waits. For anything with real latency — document processing, external API calls, multi-step reasoning — that wait is a problem. You're holding a connection open, you're blocking, and if something fails midway, you're rebuilding state from scratch.
+
+Kafka flips this. Agents publish to topics and move on. Other agents consume when they're ready. The workflow state lives in the stream, not in the call stack.
+
+The Flink SQL angle specifically was about access: SQL via a gateway is readable by business users, AI included. Where the DataStream API requires "battle-tested Java code maintained by capable engineers," Flink SQL can be generated, inspected, and modified by an agent without Java expertise. The slide framed this as a spectrum — DataStream for mission-critical, high-SLA workloads with a handful of complex jobs; Flink SQL for long-tail use cases, potentially millions of jobs, where AI is in the loop generating or modifying queries.
+
+It's a natural pairing with what LobsterX was doing with Telegram. The interface is async, the transport is async, and now the agent-to-agent communication is async too. The whole stack is designed around the assumption that work takes time.
+
+No Haystack integration with Kafka or Flink exists currently — something worth watching if you're wiring observability agents into a streaming pipeline.
+
+---
+
 <!-- MORE TALKS TO BE ADDED THROUGHOUT THE DAY -->
 
 ---
