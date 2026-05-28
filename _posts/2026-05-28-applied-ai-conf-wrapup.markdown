@@ -308,6 +308,57 @@ The ADR idea for AI decisions is the one I'll probably use. Engineering teams wr
 
 ---
 
+## Fin: the company that changed everything, including its name
+
+The closing keynote was from [Fin](https://fin.ai) — formerly known as Intercom, rebranded just two weeks before the conference. The speaker was the most energetic of the day, and the talk landed accordingly.
+
+The opening slide was a wall of text, and intentionally so:
+
+![Fin company pivot](/assets/2026/05/fin-pivot.jpg)
+
+*"We changed our strategy, our company mission, our culture, what we build, how we build, our product momentum, our pricing + packaging, our team, our roles, our titles, our product differentiators, how we sell, how we compensate, we changed our branding, we launched new competitive brands, and 2 weeks ago we changed the name of the company."*
+
+That's not a pivot. That's a full rebuild. From a $400M ARR business. And they did it fast.
+
+The framing for why: a diagram showing what "Chat as UI" actually does to your addressable market.
+
+![Chat as UI expands TAM](/assets/2026/05/fin-chat-ui.jpg)
+
+Before: your users need to both know *what* they want to do and *how* to do it. The overlap of those two groups is your real market. After chat: knowing *what* is enough. The AI handles the *how*. The addressable circle expands dramatically.
+
+It's a clean way to explain why every legacy software company is scrambling right now. If your product used to require skill to operate, that moat just disappeared.
+
+### What future products look like
+
+![The future products](/assets/2026/05/fin-future-products.jpg)
+
+Their list of what winning products will look like:
+- Own complete domain areas — less point solutions, fewer tools
+- Fully agentic — automate everything
+- Let you interact however you want — CLI, API, text UI, GUI, Claude
+- Self-improving — proactively identify areas for improvement
+- Strategic systems — inputs are policies and postures, not cases and tasks
+
+And the line that closed it: *"The primary performance vector is the quality and depth of the AI itself."*
+
+Not UX. Not features. Not integrations. The AI quality is the product.
+
+### Grow the new muscles
+
+The tactical slide was blunt:
+
+![Your previous processes are out of date](/assets/2026/05/fin-new-muscles.jpg)
+
+*"Your previous processes are hopelessly out of date. Solve for AI Reliability first. Design Exploration is a lot cheaper now, use it. Grow the new muscles, fast."*
+
+The "new muscles" list: empirical evaluation, scientific rigor, causality (why did this metric move?), prompting, ML architecture, task decomposition, post-training, pre-training, understanding speed/cost/accuracy/hallucination tradeoffs. They back this with a research hub at [fin.ai/research](https://fin.ai/research) — papers on RAG evaluation, the Agency-Control-Reliability tradeoff for agents, LLM reranking. Worth bookmarking.
+
+![New muscles and research](/assets/2026/05/fin-research.jpg)
+
+The role shift message echoed what Parloa said earlier: the new designer is also the front-end engineer, the new engineer is also the product manager. You own your domain end to end. The separation of concerns that used to make sense in a slower-moving world doesn't map onto how AI products get built.
+
+---
+
 ## Takeaways
 
 <!-- TO BE WRITTEN AT END OF DAY -->
