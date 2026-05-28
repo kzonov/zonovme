@@ -286,6 +286,28 @@ That last part is what makes it practical. Changing a frozen prompt is a deploy.
 
 ---
 
+## Miro: collaboration in the AI era
+
+[Miro](https://miro.com)'s talk was about keeping teams aligned when agents are doing more of the work. It was a mixed bag, but one slide landed hard:
+
+![Cursor made typing 10x faster](/assets/2026/05/miro-typing-bottleneck.jpg)
+
+**"Cursor made typing 10x faster. Typing was never your bottleneck."**
+
+It's a useful reframe. Most conversations about AI productivity focus on the wrong unit. The bottleneck in software is almost never keystrokes — it's decisions, alignment, context. Tools that make you type faster don't move that needle much.
+
+The practical takeaway slide had three things worth keeping:
+
+![Three things you can do tomorrow](/assets/2026/05/miro-three-things.jpg)
+
+- **Map your context** — spend 30 minutes listing every place your team's AI context lives. Write a one-pager that points to all of it. (Sounds obvious. Almost no one has done it.)
+- **Make one judgement call "durable"** — pick a recurring decision (model choice, rollback rule) and write a one-paragraph ADR: what you decided, why, what you ruled out.
+- **Make one delegation rule explicit** — pick one agentic workflow, write a paragraph on what the agent does without asking, what needs sign-off, and what never gets delegated. Share it.
+
+The ADR idea for AI decisions is the one I'll probably use. Engineering teams write ADRs for architecture — there's no reason not to do the same for "why are we using this model" or "under what conditions does the agent escalate."
+
+---
+
 ## Takeaways
 
 <!-- TO BE WRITTEN AT END OF DAY -->
