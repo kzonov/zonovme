@@ -222,6 +222,8 @@ Worth noting: [Langfuse](https://langfuse.com) — whose observability UI appear
 
 ## Peec AI: the heavy model teaches, the cheap model ships
 
+[Peec AI](https://peec.ai) is a Berlin company tracking brand visibility across AI search engines — ChatGPT, Claude, Gemini. The talk was about how they built the AI inside their product.
+
 This one had one of the best single slides of the day.
 
 ![A heavy model judges what a cheap model produces](/assets/2026/05/peecai-asymmetry.jpg)
