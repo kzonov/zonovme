@@ -26,7 +26,7 @@ author:
   first_name: ''
   last_name: ''
 permalink: "/applied-ai-conf-2026-wrapup/"
-excerpt: "Notes and takes from a day at Applied AI Conf {Tech: Europe} — on agents as org-level infrastructure, MCP vs CLI tradeoffs, and why the boring parts of agent architecture (auth, egress, audit) are actually the interesting parts."
+excerpt: "Notes from a day at Applied AI Conf {Tech: Europe} in Berlin — on agent infrastructure, blast-radius thinking, the judge-generator cost pattern, and why the engineer is now also the product manager whether they like it or not."
 ---
 
 ![Applied AI Conf badge](/assets/2026/05/applied-ai-conf-badge.jpg)
@@ -391,17 +391,34 @@ A natural companion to the Langdock caching talk. Loher leads Gemini API batch m
 
 ## Takeaways
 
-<!-- TO BE WRITTEN AT END OF DAY -->
+Two themes ran through almost every talk today, cutting across companies, scales, and domains.
+
+**The first is economics.** Everyone is concerned about the cost of AI at production scale, and the solutions are converging on the same ideas from different directions. Prompt caching (Langdock, Google DeepMind) keeps tokens out of repeat inference. Model routing (Choco) sends cheaper models where cheaper models are good enough. The Peec AI judge-generator pattern — expensive model teaches, cheap model ships — is probably the most elegant framing of the whole problem: the intelligence belongs in the evaluation loop, not the production hot path. You pay once to distill judgment into a prompt, then run the cheap thing indefinitely.
+
+These aren't separate techniques. They're the same architectural principle from different angles: heavy models belong offline, in the design and validation phase. Light models belong online.
+
+**The second is identity.** Multiple talks — Parloa, Fin, Miro — made some version of the same claim: the role boundaries between designer, engineer, and product manager are dissolving. The designer who ships, the engineer who owns outcomes — that's the emerging unit of work. The separation of concerns that used to make sense in slower-moving product cycles doesn't map cleanly onto how AI products get built and improved.
+
+I don't build user-facing products. I'm an SRE, and I sit well behind the feature layer. But I felt this one. The way I approach my current work — replacing Datadog with an open-source observability stack and wiring it into an AI-native workflow — the question is never just "does it work." It's "does the person on call understand what they're looking at, and does the system point them toward what to do next." That's a product question. I've been answering it without using those words.
 
 ---
 
-<!-- LINKEDIN ANNOUNCEMENT DRAFT -->
+On the conference itself: it was good. A bit too dense for a single day — the talks were substantive enough that a second day to let things breathe (and actually talk to people between sessions) would have helped. A few of the side rooms had acoustic issues that made it hard to follow the speaker. Small complaints. The topics were genuinely at the frontier, and the room felt like people who were building things rather than watching the AI wave from the shore. That combination is rarer than it should be.
+
+Until next year.
+
+---
+
+<!-- LINKEDIN ANNOUNCEMENT -->
 <!--
-Just published my wrap-up from Applied AI Conf {Tech: Europe} 👇
+Just wrapped up a day at Applied AI Conf {Tech: Europe} in Berlin. Here's the honest version of what I took away.
 
-The talk that stuck with me most wasn't about a new model or a new benchmark — it was about something much more boring: auth layers, egress proxies, and audit trails for AI agents.
+Two themes ran through almost every talk.
 
-Dust made the case that agents shouldn't be personal tools — they're company infrastructure. And if that's true, the unsexy plumbing (who can call what, where does it call out, what gets logged) matters a lot.
+The first is economics. Everyone is figuring out how to run AI at production scale without the bill getting out of hand. Prompt caching, model routing, and the judge-generator pattern (expensive model evaluates → cheap model ships) are different angles on the same insight: heavy models belong in the design loop, not the hot path.
 
-Full notes and takes on my blog: [LINK]
+The second is identity. Multiple speakers made some version of the same claim: the designer/engineer/PM separation is dissolving. The engineer who owns outcomes end to end — that's the emerging unit of work. As an SRE at deepset.ai, I felt it. The way I think about observability — does the person on call understand what they're seeing, and what to do next — that's always been a product question. Now it has a name.
+
+Full notes from all the talks on my blog →
+[LINK]
 -->
