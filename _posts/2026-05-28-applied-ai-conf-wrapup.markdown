@@ -274,6 +274,16 @@ The takeaway slide was the best line of the day:
 
 Reward hacking isn't a risk to mitigate, it's the default. The advice: build the loop flexible enough that you can add a new reward in an afternoon, because you'll need to.
 
+And the second takeaway, which is the cleanest summary of the whole approach:
+
+![Pay the heavy model once to teach the light one](/assets/2026/05/peecai-pay-once.jpg)
+
+**"Pay the heavy model once to teach the light one."**
+
+The footnote: *"Same shape as distillation or RLAIF. The difference is that the output is a prompt, not a model. Cheaper to iterate on. Cheaper to debug. Cheaper to ship."*
+
+That last part is what makes it practical. Changing a frozen prompt is a deploy. Retraining a model is a project.
+
 ---
 
 ## Takeaways
