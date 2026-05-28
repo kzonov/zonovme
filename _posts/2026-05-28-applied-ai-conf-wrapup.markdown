@@ -220,6 +220,20 @@ Worth noting: [Langfuse](https://langfuse.com) — whose observability UI appear
 
 ---
 
+## Google DeepMind: the cost optimization ladder
+
+[Lucia Loher](https://www.linkedin.com/in/lucia-loher) and [Patrick Löber](https://www.linkedin.com/in/patrick-löber/) from Google DeepMind picked up where Langdock left off on caching — but framed inside a more uncomfortable premise: **inference cost grows faster than quality and value.** Models improve, but the bill grows faster than the improvements justify. Their answer is three tools, stacked.
+
+The first is prompt caching, and they went deeper than the basics. **Explicit caching** is manual — mark specific segments, control TTL, best suited for multi-turn agents where a large stable system prompt plus tool context repeats across turns. **Implicit caching** is automatic prefix reuse with zero code changes. The new concept worth knowing: **block-wise caching** — caching arbitrary segments independently, not just the leading prefix. For RAG pipelines this changes the math: cache different parts of your corpus separately and compose which blocks to include at query time. Less wasted computation when retrieval draws different subsets from the same sources each run.
+
+The second lever: the **Batch API**. Not every inference needs to happen right now. Queue requests for off-peak processing, pay 50% less, get results within 24 hours. The tradeoff is latency — but there's a large class of workloads that simply don't need synchronous responses. Evaluation runs, document indexing, nightly analytics, anything feeding a pipeline rather than a user. For those jobs, paying for synchronous inference is paying a premium for speed you don't need. (I made a note to myself: *ask the team whether deepset exposes Batch API access to customers.*)
+
+The third lever: **Flex Inference** — best-effort scheduling for non-critical work. Unlike Batch, it's synchronous: you get a response immediately. But the compute is allocated opportunistically, so no throughput SLA. About 50% discount. Useful for scheduled background jobs, monitoring runs, anything running on a cron schedule where a slower response time is fine.
+
+The recommended combination for maximum savings: **explicit caching + Flex Inference**. Stable context so the cache hits reliably; opportunistic scheduling so you're not paying for reserved compute. For the right workloads, that's not incremental — it's structural.
+
+---
+
 ## Peec AI: the heavy model teaches, the cheap model ships
 
 [Peec AI](https://peec.ai) is a Berlin company tracking brand visibility across AI search engines — ChatGPT, Claude, Gemini. [Oğuz Gültepe](https://www.linkedin.com/in/oguzgultepe/), their Senior AI Engineer, gave a talk about how they built the AI inside their product.
@@ -379,13 +393,13 @@ Not every talk made it into my notes in detail, but a few deserve a line.
 
 [Restate](https://restate.dev) is a durable execution framework — think reliable async/await, stateful workflows, resilient RPC. The "missing infrastructure layer" framing resonates: most agent orchestration today is built on either bare HTTP or heavy workflow engines, and there's a real gap in the middle for something that handles retries, state, and failure recovery without requiring a separate database. Worth watching if you're building anything that needs to survive a process restart.
 
-**[Lucia Loher](https://de.linkedin.com/in/lucia-loher) & [Patrick Löber](https://www.linkedin.com/in/patrick-löber/) · Google DeepMind — "From Caching to Batching to Flex — How to optimize AI system for production"**
-
-A natural companion to the Langdock caching talk. Loher leads Gemini API batch mode at Google DeepMind — 50% cost reduction for workloads that can tolerate 24-hour turnaround. The caching → batching → flex progression as a cost optimization ladder is a useful framework. Not every inference needs to happen in real time.
-
 **[Bruno Show](https://www.linkedin.com/in/brunoshow/) · Choco — "Model Routing in Production: What We Learned the Hard Way"**
 
 [Choco](https://choco.com) is a food supply-chain platform. Model routing in production — picking the right model dynamically based on task complexity and cost constraints — is the operational complement to everything Peec AI was talking about at the architecture level. The "hard way" framing suggests there are failure modes worth knowing about.
+
+**Distil Labs — "The case for fine-tuned SLMs"**
+
+The spectrum of small-model options is wider than benchmark comparisons suggest. An untrained base open-source SLM is very cheap to run, but the quality gap against frontier models on most tasks is real and often not worth it. A fine-tuned SLM — which is what Distil Labs provides — can close that gap on narrow, well-defined tasks while remaining cheap to host. When this trade makes sense: stable system prompt, bounded task scope, scale where cost actually matters. When it doesn't: open-ended tasks like a coding agent, where prompt variability is the whole point and the constraints that make fine-tuning effective become liabilities. The underlying principle echoes what Peec AI said from a different angle — don't pre-optimize before volume justifies it, but once it does, choosing the right model tier for the task is real engineering, not a compromise.
 
 ---
 
@@ -393,7 +407,7 @@ A natural companion to the Langdock caching talk. Loher leads Gemini API batch m
 
 Two themes ran through almost every talk today, cutting across companies, scales, and domains.
 
-**The first is economics.** Everyone is concerned about the cost of AI at production scale, and the solutions are converging on the same ideas from different directions. Prompt caching (Langdock, Google DeepMind) keeps tokens out of repeat inference. Model routing (Choco) sends cheaper models where cheaper models are good enough. The Peec AI judge-generator pattern — expensive model teaches, cheap model ships — is probably the most elegant framing of the whole problem: the intelligence belongs in the evaluation loop, not the production hot path. You pay once to distill judgment into a prompt, then run the cheap thing indefinitely.
+**The first is economics.** Everyone is concerned about the cost of AI at production scale, and the solutions are converging on the same ideas from different directions. Prompt caching (Langdock, Google DeepMind) keeps tokens out of repeat inference. Model routing (Choco) sends cheaper models where cheaper models are good enough. Fine-tuned SLMs (Distil Labs) narrow the task scope so a smaller model can match frontier quality at a fraction of the run cost. The Peec AI judge-generator pattern — expensive model teaches, cheap model ships — is probably the most elegant framing of the whole problem: the intelligence belongs in the evaluation loop, not the production hot path. You pay once to distill judgment into a prompt, then run the cheap thing indefinitely.
 
 These aren't separate techniques. They're the same architectural principle from different angles: heavy models belong offline, in the design and validation phase. Light models belong online.
 
