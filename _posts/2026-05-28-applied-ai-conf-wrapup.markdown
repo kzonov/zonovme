@@ -76,6 +76,44 @@ The bi-directional harness diagram — Sandbox, Projects, Tasks, Conversations, 
 
 ---
 
+## LobsterX: dissecting an agent with a scalpel
+
+The second talk took a different approach — instead of architecture philosophy, it was a live autopsy of a real agent.
+
+[Clelia Astra Bertelli](https://github.com/AstraBert) (AstraBert on GitHub) built [LobsterX](https://github.com/AstraBert/workflows-acp/blob/main/packages/lobsterx/README.md) — a document-processing agent that lives in Telegram. You send it a PDF and a task; it parses, extracts, classifies, reasons, and replies when it's done. The whole agent is ~600 lines of code. The workflow orchestration underneath is ~1.5k. Three swappable LLM providers.
+
+![What is LobsterX](/assets/2026/05/lobsterx-what-is.jpg)
+
+The framing device was four anatomical metaphors: **Brain** (the LLM), **Loop** (the event-driven workflow), **Eyes & Limbs** (filesystem and tools), **Ears & Mouth** (how it talks to a human).
+
+![Why dissect an agent](/assets/2026/05/lobsterx-why-dissect.jpg)
+
+It's a good framework. The "interesting engineering lives in the gap between prompt-in and answer-out" line is one of the better one-liners I heard today.
+
+### Structured outputs all the way down
+
+The Brain section had something I'll probably steal: every LLM call is constrained by a typed JSON schema. No free-form prose allowed, ever. One schema per operation type — a `Think` call looks different from an `Act` call — which forces a hard separation between reasoning and action at the code level.
+
+![Steering structured outputs](/assets/2026/05/lobsterx-structured-outputs.jpg)
+
+There's no "raw chat" escape hatch in the agent code. The wrapper exposes only structured-generation methods. This means the same schema works across OpenAI, Anthropic, and Google without any provider-specific branching in the agent logic.
+
+I like this. It's the kind of constraint that feels annoying when you're building but you thank yourself for later.
+
+### The virtual filesystem
+
+The Eyes section was about [AgentFS](https://agentfs.ai) — a virtualized filesystem layer built by [Turso](https://turso.tech) that LobsterX uses instead of the real machine FS. The agent gets `read / write / edit / grep / glob`. No delete. No shell execution. Credential files like `.env` are excluded entirely.
+
+![The Eyes virtual filesystem](/assets/2026/05/lobsterx-eyes-agentfs.jpg)
+
+The slide had a line I wrote down verbatim: *"If the agent is jailbroken into writing something destructive, the damage stays inside the virtual FS. Nothing leaks to the host unless you explicitly sync it."*
+
+That's a containment model. Same spirit as the Dust egress proxy — you're not trying to make the agent perfectly safe, you're bounding the blast radius when it's not.
+
+AgentFS from Turso is worth a closer look if you're building agent infrastructure. It's a standalone open-source project with Python, TypeScript, and Rust SDKs.
+
+---
+
 <!-- MORE TALKS TO BE ADDED THROUGHOUT THE DAY -->
 
 ---
