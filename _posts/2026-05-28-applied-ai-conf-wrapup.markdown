@@ -112,6 +112,40 @@ That's a containment model. Same spirit as the Dust egress proxy — you're not 
 
 AgentFS from Turso is worth a closer look if you're building agent infrastructure. It's a standalone open-source project with Python, TypeScript, and Rust SDKs.
 
+### The Limbs: LlamaCloud for document understanding
+
+Filesystem access alone only gets you plain text. LobsterX reaches for three [LlamaCloud](https://cloud.llamaindex.ai) tools to actually understand documents — each with its own typed input schema, which keeps the structured-output guarantee intact all the way down:
+
+![The Limbs document tools](/assets/2026/05/lobsterx-limbs-llamacloud.jpg)
+
+- **LlamaParse** — layout-aware parsing for PDFs, DOCX, PPTX, XLSX, images. Tables stay tables; figures get described by VLMs; reading order is preserved across columns
+- **LlamaExtract** — you hand it a JSON schema, it hands back populated objects, typed, citation-linked, validated. "No glue prompt engineering on the agent side"
+- **LlamaClassify** — classification into user-defined categories with confidence signals, used to route documents (invoice? contract? report?) before the agent decides what to do next
+
+![Why these tools change the game](/assets/2026/05/lobsterx-llamacloud-why.jpg)
+
+The key line: *"Each tool exposes a typed input schema, so the Act step can call them with full structured-output guarantees end to end."* The whole pipeline from document in to action out stays typed. That's not a small thing.
+
+### Ears & Mouth: async by default
+
+The interface choice was deliberate. Telegram was picked because messaging is async — no spinner, no held-open HTTP connection. Documents come in as attachments, land in AgentFS, and the workflow starts. The agent pings you back when it's done, which could be minutes or half an hour.
+
+![Ears and Mouth async](/assets/2026/05/lobsterx-ears-mouth.jpg)
+
+The slide had a line worth framing: *"The right interface for a long-running agent isn't a chatbot — it's a colleague who replies when they're finished."*
+
+I've been building small personal agents that use the same pattern for my music project [trianglecore.rocks](https://trianglecore.rocks) — async Telegram bots that handle things I don't want to babysit. There's something genuinely calming about the UX once you stop expecting instant responses and start treating the agent like a person who's doing a task.
+
+### A note on safety
+
+The final recap slide was honest in a way I appreciated:
+
+![Safety note](/assets/2026/05/lobsterx-safety.jpg)
+
+Virtual filesystem, no shell access, no delete primitive, credential files excluded, custom behavior via `AGENTS.md` not arbitrary instructions — all of that is real. And then the caveat: *"None of this prevents prompt injection from a malicious document the agent has been asked to read. The mitigations bound the blast radius; they don't eliminate it."*
+
+This is the right way to talk about agent safety. The goal isn't zero risk. The goal is knowing exactly what can go wrong and making sure the damage is contained when it does. Both talks today circled back to this: Dust with their egress proxy, LobsterX with the virtual filesystem. The industry seems to be converging on blast-radius thinking over "we solved it" thinking. That feels like progress.
+
 ---
 
 <!-- MORE TALKS TO BE ADDED THROUGHOUT THE DAY -->
