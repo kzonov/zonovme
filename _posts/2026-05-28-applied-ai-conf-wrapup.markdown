@@ -224,15 +224,11 @@ That distinction matters. If you memorize examples, you overfit. If you extract 
 
 [Łukasz Sągol](https://www.linkedin.com/in/lukaszsagol/), Director of Engineering at [Miro](https://miro.com), gave a talk about keeping teams aligned when agents are doing more of the work. It was a mixed bag, but one slide landed hard:
 
-![Cursor made typing 10x faster](/assets/2026/05/miro-typing-bottleneck.jpeg)
-
 **"Cursor made typing 10x faster. Typing was never your bottleneck."**
 
 It's a useful reframe. Most conversations about AI productivity focus on the wrong unit. The bottleneck in software is almost never keystrokes — it's decisions, alignment, context. Tools that make you type faster don't move that needle much.
 
 The practical takeaway slide had three things worth keeping:
-
-![Three things you can do tomorrow](/assets/2026/05/miro-three-things.jpeg)
 
 - **Map your context** — spend 30 minutes listing every place your team's AI context lives. Write a one-pager that points to all of it. (Sounds obvious. Almost no one has done it.)
 - **Make one judgement call "durable"** — pick a recurring decision (model choice, rollback rule) and write a one-paragraph ADR: what you decided, why, what you ruled out.
